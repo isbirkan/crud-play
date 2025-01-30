@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Infrastructure.Tests", "tests\CrudPlay.Tests\CrudPlay.Infrastructure.Tests\CrudPlay.Infrastructure.Tests.csproj", "{84FDA4F5-C3F0-48A8-9E26-7F3EE9F5CEC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Core", "src\CrudPlay.Core\CrudPlay.Core.csproj", "{1411C2CA-F153-49AF-8414-FAB288272403}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Application.Tests", "tests\CrudPlay.Application.Tests\CrudPlay.Application.Tests.csproj", "{58E2012D-FD2D-4C29-B5F1-BE5598F1CEF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,14 @@ Global
 		{84FDA4F5-C3F0-48A8-9E26-7F3EE9F5CEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84FDA4F5-C3F0-48A8-9E26-7F3EE9F5CEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84FDA4F5-C3F0-48A8-9E26-7F3EE9F5CEC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1411C2CA-F153-49AF-8414-FAB288272403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1411C2CA-F153-49AF-8414-FAB288272403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1411C2CA-F153-49AF-8414-FAB288272403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1411C2CA-F153-49AF-8414-FAB288272403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E2012D-FD2D-4C29-B5F1-BE5598F1CEF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E2012D-FD2D-4C29-B5F1-BE5598F1CEF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E2012D-FD2D-4C29-B5F1-BE5598F1CEF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E2012D-FD2D-4C29-B5F1-BE5598F1CEF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +58,7 @@ Global
 		{981E4EFD-D87C-470A-B0E8-B25A7F960067} = {97178CF9-5580-43F8-A96B-23F02A930AD3}
 		{811E6EBA-BA78-4D2A-A795-4DD083760032} = {97178CF9-5580-43F8-A96B-23F02A930AD3}
 		{84FDA4F5-C3F0-48A8-9E26-7F3EE9F5CEC3} = {0535EDDC-9B41-4BBB-BC2D-F42CDA4BB02D}
+		{1411C2CA-F153-49AF-8414-FAB288272403} = {97178CF9-5580-43F8-A96B-23F02A930AD3}
+		{58E2012D-FD2D-4C29-B5F1-BE5598F1CEF3} = {0535EDDC-9B41-4BBB-BC2D-F42CDA4BB02D}
 	EndGlobalSection
 EndGlobal

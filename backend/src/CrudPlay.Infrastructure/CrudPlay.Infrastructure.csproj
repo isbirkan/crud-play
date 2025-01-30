@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CrudPlay.Application\CrudPlay.Application.csproj" />
+    <ProjectReference Include="..\CrudPlay.Core\CrudPlay.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudPlay.Infrastructure.Persistance;
 
-internal class TodoRepository<T> : IRepository<T> where T : class
+internal class EfTodoRepository<T> : IRepository<T> where T : class
 {
     private readonly TodoDbContext _context;
 
-    public TodoRepository(TodoDbContext context) => _context = context;
+    public EfTodoRepository(TodoDbContext context) => _context = context;
 
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken) => await _context.Set<T>().ToListAsync();
 
-    public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken) => await _context.Set<T>().FindAsync(id);
+    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _context.Set<T>().FindAsync(id);
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken)
     {
@@ -26,7 +26,7 @@ internal class TodoRepository<T> : IRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await GetByIdAsync(id, cancellationToken);
         if (entity != null)

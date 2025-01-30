@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CrudPlay.Infrastructure.Entities;
+namespace CrudPlay.Core.Entities;
 
 public class Todo : BaseEntity
 {

@@ -1,6 +1,6 @@
-﻿namespace CrudPlay.Application.Models;
+﻿namespace CrudPlay.Core.Domain;
 
-public class TodoItem
+public class Todo
 {
     public string Title { get; set; } = string.Empty;
 
@@ -11,8 +11,4 @@ public class TodoItem
     public DateTime? DueDate { get; set; }
 
     public int Priority { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
 }

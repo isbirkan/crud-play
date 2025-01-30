@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-using CrudPlay.Application.Interfaces;
+﻿using CrudPlay.Application.Interfaces;
 using CrudPlay.Infrastructure.Interfaces;
 using CrudPlay.Infrastructure.Options;
 using CrudPlay.Infrastructure.Persistance;
@@ -31,10 +29,7 @@ public static class PersistanceInjection
         services.AddDbContext<TodoDbContext>(options =>
             options.UseSqlServer("Data Source=BRKN-PC;Initial Catalog=CrudPlay;Integrated Security=True;Encrypt=False"));
 
-
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-        services.AddScoped(typeof(IRepository<>), typeof(TodoRepository<>));
+        services.AddScoped(typeof(IRepository<>), typeof(EfTodoRepository<>));
         services.AddScoped<ITodoService, TodoService>();
 
         return services;

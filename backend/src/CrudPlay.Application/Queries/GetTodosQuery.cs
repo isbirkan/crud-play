@@ -1,5 +1,5 @@
 ﻿using CrudPlay.Application.Interfaces;
-using CrudPlay.Application.Models;
+using CrudPlay.Core.Domain;
 
 using MediatR;
 
@@ -7,20 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CrudPlay.Application.Queries;
 
-public record GetTodosQuery : IRequest<IEnumerable<TodoItem>>;
+public record GetTodosQuery : IRequest<IEnumerable<Todo>>;
 
-internal class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, IEnumerable<TodoItem>>
+internal class GetTodosQueryHandler(
+    ILogger<GetTodosQueryHandler> logger,
+    ITodoService service)
+    : IRequestHandler<GetTodosQuery, IEnumerable<Todo>>
 {
-    private readonly ILogger<IRequest> _logger;
-    private readonly ITodoService _service;
+    private readonly ILogger<GetTodosQueryHandler> _logger = logger;
+    private readonly ITodoService _service = service;
 
-    public GetTodosQueryHandler(ILogger<IRequest> logger, ITodoService service)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
-    public async Task<IEnumerable<TodoItem>> Handle(GetTodosQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Todo>> Handle(GetTodosQuery query, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Start query: {nameof(GetTodosQuery)}");
 

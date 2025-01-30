@@ -1,4 +1,4 @@
-﻿namespace CrudPlay.Infrastructure.Entities;
+﻿namespace CrudPlay.Core.Entities;
 
 public class BaseEntity
 {

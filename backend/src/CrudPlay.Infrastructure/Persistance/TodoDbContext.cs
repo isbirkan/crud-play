@@ -1,4 +1,4 @@
-﻿using CrudPlay.Infrastructure.Entities;
+﻿using CrudPlay.Core.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
