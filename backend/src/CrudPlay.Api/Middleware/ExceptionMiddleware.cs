@@ -34,17 +34,17 @@ public class ExceptionMiddleware(
     {
         _logger.LogError($"An error has occurred: {exception}");
 
-        var debugInfo = _env.IsDevelopment() ? exception.ToString() : string.Empty;
+        var debugInfo = _env.IsDevelopment() ? exception.ToString() : null;
         switch (exception)
         {
-            case ApplicationValidatorException applicationValidatorEx:
-                return WriteResponse(context, "Validation", applicationValidatorEx.Message, debugInfo, HttpStatusCode.BadRequest);
+            case ApplicationValidatorException applicationValidatorException:
+                return WriteResponse(context, "Validation", applicationValidatorException.Message, debugInfo, HttpStatusCode.BadRequest);
             case ForbiddenException:
                 return WriteResponse(context, "Forbidden", string.Empty, debugInfo, HttpStatusCode.Forbidden);
-            case NotFoundException:
-                return WriteResponse(context, "NotFound", string.Empty, debugInfo, HttpStatusCode.NotFound);
+            case NotFoundException notFoundException:
+                return WriteResponse(context, "NotFound", notFoundException.Message, debugInfo, HttpStatusCode.NotFound);
             default:
-                return WriteResponse(context, "Unhandled", string.Empty, debugInfo, HttpStatusCode.InternalServerError);
+                return WriteResponse(context, "Unhandled", null, debugInfo, HttpStatusCode.InternalServerError);
         }
     }
 

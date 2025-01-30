@@ -1,6 +1,5 @@
 ﻿namespace CrudPlay.Core.Exceptions;
 
-public class ApplicationValidatorException : Exception
+public class ApplicationValidatorException(string message) : Exception(message)
 {
-    public ApplicationValidatorException(string message) : base(message) { }
 }
