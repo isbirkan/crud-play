@@ -10,7 +10,7 @@ namespace CrudPlay.Application.Commands;
 
 public record CreateTodoCommand(CreateTodoRequest Request) : IRequest;
 
-internal class CreateTodoCommandHandler(
+public class CreateTodoCommandHandler(
     ILogger<CreateTodoCommandHandler> logger,
     ICreateTodoCommandValidator validator,
     ITodoService service)

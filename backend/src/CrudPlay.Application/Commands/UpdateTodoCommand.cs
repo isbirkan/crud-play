@@ -10,7 +10,7 @@ namespace CrudPlay.Application.Commands;
 
 public record UpdateTodoCommand(string Id, UpdateTodoRequest request) : IRequest;
 
-internal class UpdateTodoCommandHandler(
+public class UpdateTodoCommandHandler(
     ILogger<UpdateTodoCommandHandler> logger,
     IUpdateTodoCommandValidator validator,
     ITodoService service)

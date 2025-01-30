@@ -4,7 +4,7 @@ using CrudPlay.Core.Exceptions;
 
 namespace CrudPlay.Application.Validators;
 
-internal class GetTodoByIdQueryValidator : IGetTodoByIdQueryValidator
+public class GetTodoByIdQueryValidator : IGetTodoByIdQueryValidator
 {
     public void ValidateOrThrowException(GetTodoByIdQuery query)
     {

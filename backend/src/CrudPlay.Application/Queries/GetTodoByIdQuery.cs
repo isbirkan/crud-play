@@ -10,13 +10,13 @@ namespace CrudPlay.Application.Queries;
 
 public record GetTodoByIdQuery(string Id) : IRequest<Todo>;
 
-internal class GetTodoByIdHandler(
-    ILogger<GetTodoByIdHandler> logger,
+public class GetTodoByIdQueryHandler(
+    ILogger<GetTodoByIdQueryHandler> logger,
     IGetTodoByIdQueryValidator validator,
     ITodoService service)
     : IRequestHandler<GetTodoByIdQuery, Todo>
 {
-    private readonly ILogger<GetTodoByIdHandler> _logger = logger;
+    private readonly ILogger<GetTodoByIdQueryHandler> _logger = logger;
     private readonly IGetTodoByIdQueryValidator _validator = validator;
     private readonly ITodoService _service = service;
 

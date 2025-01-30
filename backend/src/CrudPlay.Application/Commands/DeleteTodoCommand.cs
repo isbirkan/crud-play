@@ -9,7 +9,7 @@ namespace CrudPlay.Application.Commands;
 
 public record DeleteTodoCommand(string Id) : IRequest;
 
-internal class DeleteTodoCommandHandler(
+public class DeleteTodoCommandHandler(
     ILogger<DeleteTodoCommandHandler> logger,
     IDeleteTodoCommandValidator validator,
     ITodoService service)

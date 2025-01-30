@@ -9,7 +9,7 @@ namespace CrudPlay.Application.Queries;
 
 public record GetTodosQuery : IRequest<IEnumerable<Todo>>;
 
-internal class GetTodosQueryHandler(
+public class GetTodosQueryHandler(
     ILogger<GetTodosQueryHandler> logger,
     ITodoService service)
     : IRequestHandler<GetTodosQuery, IEnumerable<Todo>>
