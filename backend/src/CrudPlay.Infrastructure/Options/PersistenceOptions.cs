@@ -2,7 +2,7 @@
 
 namespace CrudPlay.Infrastructure.Options;
 
-internal class PersistenceOptions
+public class PersistenceOptions
 {
     [Required]
     public string ConnectionString { get; set; } = string.Empty;
