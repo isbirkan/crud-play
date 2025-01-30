@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\CrudPlay.Infrastructure\CrudPlay.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\CrudPlay.Infrastructure\CrudPlay.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
