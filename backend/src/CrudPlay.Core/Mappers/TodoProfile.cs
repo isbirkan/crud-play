@@ -4,7 +4,7 @@ using CrudPlay.Core.DTO;
 
 namespace CrudPlay.Core.Mappers;
 
-internal class TodoProfile : Profile
+public class TodoProfile : Profile
 {
     public TodoProfile()
     {
@@ -17,9 +17,13 @@ internal class TodoProfile : Profile
 
         CreateMap<UpdateTodoRequest, Entities.Todo>()
             .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.Priority, o => o.Ignore())
+                .AfterMap((src, dest) =>
+                {
+                    if (src.Priority.HasValue) dest.Priority = src.Priority.Value;
+                })
             .ForMember(d => d.CreatedAt, o => o.Ignore())
             .ForMember(d => d.UpdatedAt, o => o.Ignore())
-            .ForAllMembers(o => o.Condition((source, destination, sourceMember, destinationMember) =>
-                sourceMember != null && !sourceMember.Equals(destinationMember)));
+            .ForAllMembers(o => o.Condition((_, _, sourceMember, _) => sourceMember is not null));
     }
 }

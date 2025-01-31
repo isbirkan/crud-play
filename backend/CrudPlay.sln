@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Infrastructure.Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Api.UnitTests", "tests\CrudPlay.Api.UnitTests\CrudPlay.Api.UnitTests.csproj", "{A95D2027-55E2-4AA7-B2A2-5A34A9E9FB4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudPlay.Core.UnitTests", "tests\CrudPlay.Core.UnitTests\CrudPlay.Core.UnitTests.csproj", "{487929D4-98BA-4484-97EE-350E06809BEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{A95D2027-55E2-4AA7-B2A2-5A34A9E9FB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A95D2027-55E2-4AA7-B2A2-5A34A9E9FB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A95D2027-55E2-4AA7-B2A2-5A34A9E9FB4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{487929D4-98BA-4484-97EE-350E06809BEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{487929D4-98BA-4484-97EE-350E06809BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{487929D4-98BA-4484-97EE-350E06809BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{487929D4-98BA-4484-97EE-350E06809BEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +73,6 @@ Global
 		{14C6203A-985D-422C-BCF3-5A4DD8A8CE93} = {0535EDDC-9B41-4BBB-BC2D-F42CDA4BB02D}
 		{22F00700-4A9F-4660-92C9-DB4EAB600A86} = {0535EDDC-9B41-4BBB-BC2D-F42CDA4BB02D}
 		{A95D2027-55E2-4AA7-B2A2-5A34A9E9FB4D} = {0535EDDC-9B41-4BBB-BC2D-F42CDA4BB02D}
+		{487929D4-98BA-4484-97EE-350E06809BEE} = {0535EDDC-9B41-4BBB-BC2D-F42CDA4BB02D}
 	EndGlobalSection
 EndGlobal

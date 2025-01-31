@@ -35,17 +35,19 @@ public class ExceptionMiddleware(
         _logger.LogError($"An error has occurred: {exception}");
 
         var debugInfo = _env.IsDevelopment() ? exception.ToString() : null;
-        switch (exception)
+        return exception switch
         {
-            case ApplicationValidatorException applicationValidatorException:
-                return WriteResponse(context, "Validation", applicationValidatorException.Message, debugInfo, HttpStatusCode.BadRequest);
-            case ForbiddenException:
-                return WriteResponse(context, "Forbidden", string.Empty, debugInfo, HttpStatusCode.Forbidden);
-            case NotFoundException notFoundException:
-                return WriteResponse(context, "NotFound", notFoundException.Message, debugInfo, HttpStatusCode.NotFound);
-            default:
-                return WriteResponse(context, "Unhandled", null, debugInfo, HttpStatusCode.InternalServerError);
-        }
+            ApplicationValidatorException applicationValidatorException =>
+                WriteResponse(context, "Validation", applicationValidatorException.Message, debugInfo, HttpStatusCode.BadRequest),
+
+            ForbiddenException =>
+                WriteResponse(context, "Forbidden", string.Empty, debugInfo, HttpStatusCode.Forbidden),
+
+            NotFoundException notFoundException =>
+                WriteResponse(context, "NotFound", notFoundException.Message, debugInfo, HttpStatusCode.NotFound),
+
+            _ => HandleGenericException(context, exception, debugInfo) // Catch-all for generic errors
+        };
     }
 
     private static async Task WriteResponse(HttpContext context, string type, string message, string debugInfo, HttpStatusCode statusCode)
@@ -56,6 +58,13 @@ public class ExceptionMiddleware(
 
         var response = new ErrorResponse(type, message, debugInfo);
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
+
+    private Task HandleGenericException(HttpContext context, Exception exception, string debugInfo)
+    {
+        _logger.LogError($"Unhandled exception: {exception.Message}", exception);
+
+        return WriteResponse(context, "Unhandled", "An unexpected error occurred", debugInfo, HttpStatusCode.InternalServerError);
     }
 
     public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)

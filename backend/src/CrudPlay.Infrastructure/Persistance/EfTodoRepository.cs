@@ -10,20 +10,20 @@ internal class EfTodoRepository<T> : IRepository<T> where T : class
 
     public EfTodoRepository(TodoDbContext context) => _context = context;
 
-    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken) => await _context.Set<T>().ToListAsync();
+    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken) => await _context.Set<T>().ToListAsync(cancellationToken: cancellationToken);
 
-    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _context.Set<T>().FindAsync(id);
+    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _context.Set<T>().FindAsync([id], cancellationToken: cancellationToken) ?? null;
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken)
     {
         _context.Set<T>().Add(entity);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
     {
         _context.Set<T>().Update(entity);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ internal class EfTodoRepository<T> : IRepository<T> where T : class
         if (entity != null)
         {
             _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

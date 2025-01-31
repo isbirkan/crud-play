@@ -1,0 +1,227 @@
+﻿using AutoMapper;
+
+using CrudPlay.Core.DTO;
+using CrudPlay.Core.Exceptions;
+using CrudPlay.Infrastructure.Interfaces;
+using CrudPlay.Infrastructure.Services;
+
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+
+using TodoEntity = CrudPlay.Core.Entities.Todo;
+using TodoItem = CrudPlay.Core.Domain.Todo;
+
+namespace CrudPlay.Infrastructure.UnitTests.Services;
+
+public class TodoServiceTests
+{
+    private readonly IMapper _mapper = Substitute.For<IMapper>();
+    private readonly IRepository<TodoEntity> _repository = Substitute.For<IRepository<TodoEntity>>();
+    private readonly TodoService _service;
+
+    private static readonly Guid _identifier1 = Guid.NewGuid();
+    private static readonly Guid _identifier2 = Guid.NewGuid();
+    private readonly TodoEntity _todoEntity1 = new()
+    {
+        Id = _identifier1,
+        Title = "First in line",
+        Description = "Do I really need one?",
+        IsCompleted = false,
+        DueDate = DateTime.MinValue,
+        Priority = 1
+    };
+    private readonly TodoEntity _todoEntity2 = new()
+    {
+        Id = _identifier2,
+        Title = "Second in line",
+        Description = "Still the same Dre",
+        IsCompleted = true,
+        DueDate = DateTime.MaxValue,
+        Priority = 9000
+    };
+
+    public TodoServiceTests()
+    {
+        _service = new(_mapper, _repository);
+    }
+
+
+    [Fact]
+    public async Task GetAllAsync_RepositoryFailure_ShouldThrowException()
+    {
+        // Arrange
+        _repository.GetAllAsync(Arg.Any<CancellationToken>()).ThrowsAsync(new Exception("An error occurred while retrieving the Todos list"));
+
+        // Act
+        var exception = await Assert.ThrowsAsync<Exception>(async () =>
+            await _service.GetAllAsync(Arg.Any<CancellationToken>()));
+
+        // Assert
+        Assert.Equal("An error occurred while retrieving the Todos list", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetAllAsync_TodoListEmpty_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns([]);
+
+        // Act
+        var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _service.GetAllAsync(Arg.Any<CancellationToken>()));
+
+        // Assert
+        Assert.Equal("No Todo items found", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetAllAsync_ResponseSuccess_ShouldReturnMappedTodoList()
+    {
+        // Arrange
+        var todoListEntity = new List<TodoEntity> { _todoEntity1, _todoEntity2 };
+        _mapper.Map<IEnumerable<TodoItem>>(Arg.Any<IEnumerable<TodoEntity>>())
+            .Returns(todoListEntity.Select(entity => new TodoItem(entity.Title, entity.Description, entity.IsCompleted, entity.DueDate, entity.Priority)));
+        _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(todoListEntity);
+
+        // Act
+        var result = await _service.GetAllAsync(Arg.Any<CancellationToken>());
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
+
+        var todoListModel = result.ToList();
+        Assert.Equal("First in line", todoListModel[0].Title);
+        Assert.Equal("Do I really need one?", todoListModel[0].Description);
+        Assert.False(todoListModel[0].IsCompleted);
+        Assert.Equal(DateTime.MinValue, todoListModel[0].DueDate);
+        Assert.Equal(1, todoListModel[0].Priority);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_RepositoryFailure_ShouldThrowException()
+    {
+        // Arrange
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).ThrowsAsync(new Exception("An error occurred while retrieving the Todos item"));
+
+        // Act
+        var exception = await Assert.ThrowsAsync<Exception>(async () =>
+            await _service.GetByIdAsync(_identifier1.ToString(), Arg.Any<CancellationToken>()));
+
+        // Assert
+        Assert.Equal("An error occurred while retrieving the Todos item", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_TodoItemNull_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns((TodoEntity?)null);
+
+        // Act
+        var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _service.GetByIdAsync(_identifier1.ToString(), Arg.Any<CancellationToken>()));
+
+        // Assert
+        Assert.Equal("No corresponding Todo item found", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_ResponseSuccess_ShouldReturnMappedTodoItem()
+    {
+        // Arrange
+        _mapper.Map<TodoItem>(_todoEntity1)
+            .Returns(new TodoItem(_todoEntity1.Title, _todoEntity1.Description, _todoEntity1.IsCompleted, _todoEntity1.DueDate, _todoEntity1.Priority));
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns(_todoEntity1);
+
+        // Act
+        var result = await _service.GetByIdAsync(_identifier1.ToString(), Arg.Any<CancellationToken>());
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("First in line", result.Title);
+        Assert.Equal("Do I really need one?", result.Description);
+        Assert.False(result.IsCompleted);
+        Assert.Equal(DateTime.MinValue, result.DueDate);
+        Assert.Equal(1, result.Priority);
+    }
+
+    [Fact]
+    public async Task CreateAsync_ResponseSuccess_ShouldCreateTodoItem()
+    {
+        // Arrange
+        var createTodoRequest = new CreateTodoRequest("I eager creation", "Please do it already!", null, 11);
+        _mapper.Map<TodoEntity>(createTodoRequest).Returns(_todoEntity1);
+
+        // Act
+        await _service.CreateAsync(createTodoRequest, Arg.Any<CancellationToken>());
+
+        // Assert
+        await _repository.Received().AddAsync(_todoEntity1, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task UpdateAsync_TodoItemNull_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var updateTodoRequest = new UpdateTodoRequest(null, null, null, null, null);
+        _mapper.Map(updateTodoRequest, _todoEntity1).Returns(_todoEntity1);
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns((TodoEntity?)null);
+
+        // Act
+        var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _service.UpdateAsync(_identifier1.ToString(), updateTodoRequest, Arg.Any<CancellationToken>()));
+
+        // Assert
+        Assert.Equal("No corresponding Todo item found", exception.Message);
+        await _repository.Received().GetByIdAsync(_identifier1, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ResponseSuccess_ShouldUpdateTodoItem()
+    {
+        // Arrange
+        var updateTodoRequest = new UpdateTodoRequest(null, null, null, null, null);
+        _mapper.Map<TodoEntity>(updateTodoRequest).Returns(_todoEntity1);
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns(_todoEntity1);
+
+        // Act
+        await _service.UpdateAsync(_identifier1.ToString(), updateTodoRequest, Arg.Any<CancellationToken>());
+
+        // Assert
+        await _repository.Received().GetByIdAsync(_identifier1, Arg.Any<CancellationToken>());
+        await _repository.Received().UpdateAsync(_todoEntity1, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task DeleteAsync_TodoItemNull_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns((TodoEntity?)null);
+
+        // Act
+        await _service.DeleteAsync(_identifier1.ToString(), Arg.Any<CancellationToken>());
+
+        // Act
+        var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _service.DeleteAsync(_identifier1.ToString(), Arg.Any<CancellationToken>()));
+
+        // Assert
+        Assert.Equal("No corresponding Todo item found", exception.Message);
+        await _repository.Received().GetByIdAsync(_identifier1, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ResponseSuccess_ShouldDeleteTodoItem()
+    {
+        // Arrange
+        _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns(_todoEntity1);
+
+        // Act
+        await _service.DeleteAsync(_identifier1.ToString(), Arg.Any<CancellationToken>());
+
+        // Assert
+        await _repository.Received().GetByIdAsync(_identifier1, Arg.Any<CancellationToken>());
+        await _repository.Received().DeleteAsync(_identifier1, Arg.Any<CancellationToken>());
+    }
+}

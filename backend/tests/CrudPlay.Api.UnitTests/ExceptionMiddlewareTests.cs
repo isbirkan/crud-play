@@ -74,7 +74,7 @@ public class ExceptionMiddlewareTests
 
         Assert.Equal((int)HttpStatusCode.InternalServerError, defaultContext.Response.StatusCode);
         Assert.Equal("Unhandled", errorResponse.Type);
-        Assert.Null(errorResponse.Message);
+        Assert.Equal("An unexpected error occurred", errorResponse.Message);
         Assert.Null(errorResponse.DebugInfo);
     }
 
@@ -105,7 +105,7 @@ public class ExceptionMiddlewareTests
 
         Assert.Equal((int)HttpStatusCode.InternalServerError, defaultContext.Response.StatusCode);
         Assert.Equal("Unhandled", errorResponse.Type);
-        Assert.Null(errorResponse.Message);
+        Assert.Equal("An unexpected error occurred", errorResponse.Message);
         Assert.NotNull(errorResponse.DebugInfo);
 
         logger.ReceivedWithAnyArgs().Log(default, default, default, default, default);
