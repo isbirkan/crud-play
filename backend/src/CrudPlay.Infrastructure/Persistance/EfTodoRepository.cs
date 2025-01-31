@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudPlay.Infrastructure.Persistance;
 
-internal class EfTodoRepository<T> : IRepository<T> where T : class
+public class EfTodoRepository<T> : IRepository<T> where T : class
 {
     private readonly TodoDbContext _context;
 

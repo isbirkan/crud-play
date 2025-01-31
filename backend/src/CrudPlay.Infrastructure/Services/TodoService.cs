@@ -42,9 +42,9 @@ public class TodoService(IMapper mapper, IRepository<TodoEntity> repository) : I
         var todo = (await _repository.GetByIdAsync(new Guid(id), cancellationToken) ?? throw new NotFoundException("No corresponding Todo item found"));
         if (todo is not null)
         {
-            var todoEntity = _mapper.Map(request, todo);
+            _mapper.Map(request, todo);
 
-            await _repository.UpdateAsync(todoEntity, cancellationToken);
+            await _repository.UpdateAsync(todo, cancellationToken);
         }
 
     }
