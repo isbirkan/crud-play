@@ -13,11 +13,9 @@ namespace CrudPlay.Api.Controllers.V1;
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class TodoController : ControllerBase
+public class TodoController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public TodoController(IMediator mediator) => _mediator = mediator;
+    private readonly IMediator _mediator = mediator;
 
     [HttpGet]
     [Route("{id?}")]

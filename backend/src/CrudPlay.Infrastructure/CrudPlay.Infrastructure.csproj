@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Persistance\DapperRepository.cs~RF13db9f97.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -22,6 +28,12 @@
   <ItemGroup>
     <ProjectReference Include="..\CrudPlay.Application\CrudPlay.Application.csproj" />
     <ProjectReference Include="..\CrudPlay.Core\CrudPlay.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\Ef\" />
+    <Folder Include="Migrations\Dapper\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
 
 </Project>

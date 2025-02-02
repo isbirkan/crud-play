@@ -1,9 +1,12 @@
-﻿using CrudPlay.Application.Interfaces;
+﻿using System.Data;
+
+using CrudPlay.Application.Interfaces;
 using CrudPlay.Infrastructure.Interfaces;
 using CrudPlay.Infrastructure.Options;
 using CrudPlay.Infrastructure.Persistance;
 using CrudPlay.Infrastructure.Services;
 
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,16 +23,34 @@ public static class PersistanceInjection
                 .ValidateOnStart();
         services.AddSingleton<IValidateOptions<PersistenceOptions>, PersistenceOptionsValidator>();
 
-        //services.AddDbContext<TodoDbContext>((serviceProvider, options) =>
-        //{
-        //    var persistenceOptions = serviceProvider.GetRequiredService<IOptions<PersistenceOptions>>().Value;
-        //    options.UseSqlServer(persistenceOptions.ConnectionString);
-        //});
+        var persistenceOptions = configuration.GetSection("PersistenceOptions").Get<PersistenceOptions>();
+        switch (persistenceOptions?.Implementation)
+        {
+            case ImplementationType.EntityFramework:
+                // Register EF Core DbContext
+                services.AddDbContext<TodoDbContext>((serviceProvider, options) =>
+                {
+                    options.UseSqlServer(
+                        persistenceOptions.ConnectionString,
+                        sqlOptions => sqlOptions.MigrationsAssembly("CrudPlay.Infrastructure")
+                                                .MigrationsHistoryTable("__EFMigrationsHistory", "Ef"));
+                });
 
-        services.AddDbContext<TodoDbContext>(options =>
-            options.UseSqlServer("Data Source=BRKN-PC;Initial Catalog=CrudPlay;Integrated Security=True;Encrypt=False"));
+                services.AddScoped(typeof(IRepository<>), typeof(EfTodoRepository<>));
+                break;
 
-        services.AddScoped(typeof(IRepository<>), typeof(EfTodoRepository<>));
+            case ImplementationType.Dapper:
+                // Register Dapper's IDbConnection
+                services.AddScoped<IDbConnection>(sp =>
+                    new SqlConnection(persistenceOptions.ConnectionString));
+
+                services.AddScoped(typeof(IRepository<>), typeof(DapperRepository<>));
+                break;
+
+            default:
+                throw new ArgumentException("Invalid Persistence Implementation.");
+        }
+
         services.AddScoped<ITodoService, TodoService>();
 
         return services;
@@ -37,6 +58,20 @@ public static class PersistanceInjection
 
     public static void InitializeDatabase(IServiceProvider serviceProvider)
     {
-        DatabaseInitializer.InitializeDatabase(serviceProvider);
+        var persistenceOptions = serviceProvider.GetRequiredService<IOptions<PersistenceOptions>>().Value;
+
+        switch (persistenceOptions.Implementation)
+        {
+            case ImplementationType.EntityFramework:
+                DatabaseInitializer.InitializeEfDatabase(serviceProvider);
+                break;
+
+            case ImplementationType.Dapper:
+                DatabaseInitializer.InitializeDapperDatabase(persistenceOptions.ConnectionString);
+                break;
+
+            default:
+                throw new ArgumentException("Invalid Persistence Implementation.");
+        }
     }
 }

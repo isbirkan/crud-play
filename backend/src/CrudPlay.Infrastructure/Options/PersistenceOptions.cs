@@ -1,12 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CrudPlay.Infrastructure.Options;
+﻿namespace CrudPlay.Infrastructure.Options;
 
 public class PersistenceOptions
 {
-    [Required]
     public string ConnectionString { get; set; } = string.Empty;
 
-    [Required]
-    public string Implementation { get; set; } = string.Empty;
+    private string _implementation = "EntityFramework";
+
+    public ImplementationType Implementation
+    {
+        get => Enum.TryParse<ImplementationType>(_implementation, true, out var result)
+            ? result
+            : ImplementationType.EntityFramework;
+
+        set => _implementation = value.ToString();
+    }
 }

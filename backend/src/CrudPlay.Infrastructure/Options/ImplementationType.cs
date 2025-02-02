@@ -1,6 +1,6 @@
 ﻿namespace CrudPlay.Infrastructure.Options;
 
-internal enum ImplementationType
+public enum ImplementationType
 {
     EntityFramework,
     Dapper

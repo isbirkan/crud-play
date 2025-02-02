@@ -9,17 +9,6 @@ public class GetTodoByIdQueryValidatorTests
     private readonly GetTodoByIdQueryValidator _validator = new();
 
     [Fact]
-    public void ValidateOrThrowException_CommandNull_ShouldThrowException()
-    {
-        // Act
-        void action() => _validator.ValidateOrThrowException(null);
-
-        // Assert
-        var exception = Assert.Throws<ApplicationValidatorException>(action);
-        Assert.Equal("Request object cannot be null", exception.Message);
-    }
-
-    [Fact]
     public void ValidateOrThrowException_IdentifierNotValid_ShouldThrowException()
     {
         // Arrange

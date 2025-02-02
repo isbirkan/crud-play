@@ -8,11 +8,6 @@ public class DeleteTodoCommandValidator : IDeleteTodoCommandValidator
 {
     public void ValidateOrThrowException(DeleteTodoCommand command)
     {
-        if (command is null)
-        {
-            throw new ApplicationValidatorException("Request object cannot be null");
-        }
-
         if (string.IsNullOrWhiteSpace(command.Id))
         {
             throw new ApplicationValidatorException("Identifier must not be null");

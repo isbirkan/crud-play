@@ -29,8 +29,22 @@ public class GetTodosQueryHandlerTests
 
         _service.GetAllAsync(cancellationToken).Returns(
             [
-                new("My first ever Todo", "I swear! This is my first time!", false, null, 69),
-                new("Maybe I will second this", "I did like it though", true, null, 0)
+                new(
+                    "number-one-id",
+                    "My first ever Todo",
+                    "I swear! This is my first time!",
+                    false,
+                    null,
+                    69
+                    ),
+                new(
+                    "number-two-id",
+                    "Maybe I will second this",
+                    "I did like it though",
+                    true,
+                    null,
+                    0
+                    )
             ]);
 
         // Act

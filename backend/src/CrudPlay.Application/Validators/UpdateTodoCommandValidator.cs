@@ -8,11 +8,6 @@ public class UpdateTodoCommandValidator : IUpdateTodoCommandValidator
 {
     public void ValidateOrThrowException(UpdateTodoCommand command)
     {
-        if (command is null || command.request is null)
-        {
-            throw new ApplicationValidatorException("Request object cannot be null");
-        }
-
         if (string.IsNullOrWhiteSpace(command.Id))
         {
             throw new ApplicationValidatorException("Identifier must not be null");

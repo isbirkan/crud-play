@@ -8,31 +8,6 @@ public class UpdateTodoCommandValidatorTests
 {
     private readonly UpdateTodoCommandValidator _validator = new();
 
-    [Fact]
-    public void ValidateOrThrowException_CommandNull_ShouldThrowException()
-    {
-        // Act
-        void action() => _validator.ValidateOrThrowException(null);
-
-        // Assert
-        var exception = Assert.Throws<ApplicationValidatorException>(action);
-        Assert.Equal("Request object cannot be null", exception.Message);
-    }
-
-    [Fact]
-    public void ValidateOrThrowException_CommandRequestNull_ShouldThrowException()
-    {
-        // Arrange
-        var command = new UpdateTodoCommand("", null);
-
-        // Act
-        void action() => _validator.ValidateOrThrowException(command);
-
-        // Assert
-        var exception = Assert.Throws<ApplicationValidatorException>(action);
-        Assert.Equal("Request object cannot be null", exception.Message);
-    }
-
     [Theory]
     [InlineData(null)]
     [InlineData("")]

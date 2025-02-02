@@ -8,7 +8,7 @@ public class PersistenceOptionsValidatorTests
     private readonly PersistenceOptions _options = new()
     {
         ConnectionString = "letsConnect",
-        Implementation = "thisistheway"
+        Implementation = ImplementationType.EntityFramework
     };
 
     [Fact]
@@ -37,51 +37,5 @@ public class PersistenceOptionsValidatorTests
         // Assert
         Assert.True(result.Failed);
         Assert.Equal("ConnectionString must be provided", result.FailureMessage);
-    }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("   ")]
-    public void Validate_PersistenceOptions_ImplementationNullOrEmptyOrWhitespace_ShouldReturnValidationResultFail(string implementation)
-    {
-        // Arrange
-        _options.Implementation = implementation;
-
-        // Act
-        var result = _validator.Validate("", _options);
-
-        // Assert
-        Assert.True(result.Failed);
-        Assert.Equal("Implementation must be provided", result.FailureMessage);
-    }
-
-    [Fact]
-    public void Validate_PersistenceOptions_ImplementationInvalid_ShouldReturnValidationResultFail()
-    {
-        // Arrange
-        _options.Implementation = "NobodyWillKnow";
-
-        // Act
-        var result = _validator.Validate("", _options);
-
-        // Assert
-        Assert.True(result.Failed);
-        Assert.Equal("Implementation 'NobodyWillKnow' is not valid. Supported values are: EntityFramework, Dapper", result.FailureMessage);
-    }
-
-    [Theory]
-    [InlineData("EntityFramework")]
-    [InlineData("Dapper")]
-    public void Validate_PersistenceOptions_ImplementationValid_ShouldReturnValidationResultSuccess(string implementation)
-    {
-        // Arrange
-        _options.Implementation = implementation;
-
-        // Act
-        var result = _validator.Validate("", _options);
-
-        // Assert
-        Assert.True(result.Succeeded);
     }
 }

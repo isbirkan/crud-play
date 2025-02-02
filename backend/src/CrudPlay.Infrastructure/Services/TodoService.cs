@@ -18,7 +18,7 @@ public class TodoService(IMapper mapper, IRepository<TodoEntity> repository) : I
 
     public async Task<IEnumerable<TodoItem>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var todos = await _repository.GetAllAsync(cancellationToken);
+        var todos = await _repository.GetListAsync(cancellationToken);
         return (todos is null || !todos.Any()) ? throw new NotFoundException("No Todo items found") : _mapper.Map<IEnumerable<TodoItem>>(todos);
     }
 
@@ -34,7 +34,7 @@ public class TodoService(IMapper mapper, IRepository<TodoEntity> repository) : I
         todo.CreatedAt = DateTime.UtcNow;
         todo.UpdatedAt = DateTime.UtcNow;
 
-        await _repository.AddAsync(todo, cancellationToken);
+        await _repository.CreateAsync(todo, cancellationToken);
     }
 
     public async Task UpdateAsync(string id, UpdateTodoRequest request, CancellationToken cancellationToken)
@@ -43,6 +43,7 @@ public class TodoService(IMapper mapper, IRepository<TodoEntity> repository) : I
         if (todo is not null)
         {
             _mapper.Map(request, todo);
+            todo.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(todo, cancellationToken);
         }

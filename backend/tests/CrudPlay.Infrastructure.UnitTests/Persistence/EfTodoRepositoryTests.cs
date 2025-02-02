@@ -2,6 +2,7 @@
 using CrudPlay.Infrastructure.Persistance;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace CrudPlay.Infrastructure.UnitTests.Persistence;
 
@@ -34,10 +35,13 @@ public class EfTodoRepositoryTests
 
     public EfTodoRepositoryTests()
     {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection()
+            .Build();
         var options = new DbContextOptionsBuilder<TodoDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        _context = new(options);
+        _context = new(options, configuration);
         _repository = new(_context);
 
         _context.Todos.Add(_todoEntity1);
@@ -49,7 +53,7 @@ public class EfTodoRepositoryTests
     public async Task GetAllAsync_ShouldReturnTodoList()
     {
         // Act
-        var todos = await _repository.GetAllAsync(CancellationToken.None);
+        var todos = await _repository.GetListAsync(CancellationToken.None);
 
         // Assert
         Assert.NotNull(todos);
@@ -97,10 +101,10 @@ public class EfTodoRepositoryTests
         };
 
         // Act
-        await _repository.AddAsync(todo, CancellationToken.None);
+        await _repository.CreateAsync(todo, CancellationToken.None);
 
         // Assert
-        var todos = await _repository.GetAllAsync(CancellationToken.None);
+        var todos = await _repository.GetListAsync(CancellationToken.None);
         Assert.NotNull(todos);
         Assert.Equal(3, todos.Count());
 

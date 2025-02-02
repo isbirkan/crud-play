@@ -33,7 +33,13 @@ public class GetTodoByIdQueryHandlerTests
         var cancellationToken = new CancellationToken();
 
         _service.GetByIdAsync(identifier, cancellationToken).Returns(
-            new Todo("My first ever Todo", "I swear! This is my first time!", false, null, 69));
+            new Todo(
+                "number-one-id",
+                "My first ever Todo",
+                "I swear! This is my first time!",
+                false,
+                null, 69)
+            );
 
         // Act
         var result = await _handler.Handle(query, cancellationToken);

@@ -51,7 +51,7 @@ public class TodoServiceTests
     public async Task GetAllAsync_RepositoryFailure_ShouldThrowException()
     {
         // Arrange
-        _repository.GetAllAsync(Arg.Any<CancellationToken>())
+        _repository.GetListAsync(Arg.Any<CancellationToken>())
             .ThrowsAsync(new Exception("An error occurred while retrieving the Todos list"));
 
         // Act
@@ -66,7 +66,7 @@ public class TodoServiceTests
     public async Task GetAllAsync_TodoListEmpty_ShouldThrowNotFoundException()
     {
         // Arrange
-        _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns([]);
+        _repository.GetListAsync(Arg.Any<CancellationToken>()).Returns([]);
 
         // Act
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
@@ -83,8 +83,16 @@ public class TodoServiceTests
         var todoListEntity = new List<TodoEntity> { _todoEntity1, _todoEntity2 };
 
         _mapper.Map<IEnumerable<TodoItem>>(Arg.Any<IEnumerable<TodoEntity>>())
-            .Returns(todoListEntity.Select(entity => new TodoItem(entity.Title, entity.Description, entity.IsCompleted, entity.DueDate, entity.Priority)));
-        _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(todoListEntity);
+            .Returns(todoListEntity.Select(entity => new TodoItem
+            (
+                entity.Id.ToString(),
+                entity.Title,
+                entity.Description,
+                entity.IsCompleted,
+                entity.DueDate,
+                entity.Priority
+            )));
+        _repository.GetListAsync(Arg.Any<CancellationToken>()).Returns(todoListEntity);
 
         // Act
         var result = await _service.GetAllAsync(CancellationToken.None);
@@ -135,7 +143,16 @@ public class TodoServiceTests
     {
         // Arrange
         _mapper.Map<TodoItem>(_todoEntity1)
-            .Returns(new TodoItem(_todoEntity1.Title, _todoEntity1.Description, _todoEntity1.IsCompleted, _todoEntity1.DueDate, _todoEntity1.Priority));
+            .Returns(
+            new TodoItem
+            (
+                _todoEntity1.Id.ToString(),
+                _todoEntity1.Title,
+                _todoEntity1.Description,
+                _todoEntity1.IsCompleted,
+                _todoEntity1.DueDate,
+                _todoEntity1.Priority
+            ));
         _repository.GetByIdAsync(_identifier1, Arg.Any<CancellationToken>()).Returns(_todoEntity1);
 
         // Act
@@ -162,7 +179,7 @@ public class TodoServiceTests
         await _service.CreateAsync(createTodoRequest, CancellationToken.None);
 
         // Assert
-        await _repository.Received().AddAsync(_todoEntity1, Arg.Any<CancellationToken>());
+        await _repository.Received().CreateAsync(_todoEntity1, Arg.Any<CancellationToken>());
     }
 
     [Fact]
