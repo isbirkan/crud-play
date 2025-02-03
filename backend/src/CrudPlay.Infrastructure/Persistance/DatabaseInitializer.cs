@@ -1,4 +1,7 @@
-﻿using DbUp;
+﻿using CrudPlay.Infrastructure.Persistance.Identity;
+using CrudPlay.Infrastructure.Persistance.Todo;
+
+using DbUp;
 using DbUp.Engine;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +11,14 @@ namespace CrudPlay.Infrastructure.Persistance;
 
 public static class DatabaseInitializer
 {
+    public static void InitializeIdentityDatabase(IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var identityDbContext = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
+
+        identityDbContext.Database.Migrate();
+    }
+
     public static void InitializeEfDatabase(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();

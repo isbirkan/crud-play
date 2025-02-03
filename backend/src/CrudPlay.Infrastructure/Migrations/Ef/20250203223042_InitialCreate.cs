@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CrudPlay.Infrastructure.Migrations.EF
+namespace CrudPlay.Infrastructure.Migrations.Ef
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

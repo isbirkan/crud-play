@@ -6,6 +6,7 @@ using CrudPlay.Core.DTO;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrudPlay.Api.Controllers.V1;
@@ -13,6 +14,7 @@ namespace CrudPlay.Api.Controllers.V1;
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/[controller]")]
+[Authorize]
 public class TodoController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
@@ -34,6 +36,7 @@ public class TodoController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> PostAsync([FromBody] CreateTodoRequest request, CancellationToken cancellationToken)
     {
         await _mediator.Send(new CreateTodoCommand(request), cancellationToken);
+
         return Ok();
     }
 
@@ -42,6 +45,7 @@ public class TodoController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> PatchAsync([FromRoute] string id, [FromBody] UpdateTodoRequest request, CancellationToken cancellationToken)
     {
         await _mediator.Send(new UpdateTodoCommand(id, request), cancellationToken);
+
         return Ok();
     }
 
@@ -50,6 +54,7 @@ public class TodoController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> DeleteAsync([FromRoute] string id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteTodoCommand(id), cancellationToken);
+
         return Ok();
     }
 }

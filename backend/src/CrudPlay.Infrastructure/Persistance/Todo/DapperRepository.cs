@@ -5,7 +5,7 @@ using CrudPlay.Infrastructure.Interfaces;
 
 using Dapper;
 
-namespace CrudPlay.Infrastructure.Persistance;
+namespace CrudPlay.Infrastructure.Persistance.Todo;
 
 public class DapperRepository<T>(IDbConnection dbConnection) : IRepository<T> where T : class
 {

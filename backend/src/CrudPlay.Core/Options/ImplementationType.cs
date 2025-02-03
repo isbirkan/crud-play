@@ -1,4 +1,4 @@
-﻿namespace CrudPlay.Infrastructure.Options;
+﻿namespace CrudPlay.Core.Options;
 
 public enum ImplementationType
 {

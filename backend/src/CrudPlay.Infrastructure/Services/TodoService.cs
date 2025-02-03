@@ -6,8 +6,8 @@ using CrudPlay.Core.DTO;
 using CrudPlay.Core.Exceptions;
 using CrudPlay.Infrastructure.Interfaces;
 
-using TodoEntity = CrudPlay.Core.Entities.Todo;
-using TodoItem = CrudPlay.Core.Domain.Todo;
+using TodoEntity = CrudPlay.Core.Entities.TodoEntity;
+using TodoItem = CrudPlay.Core.Domain.TodoModel;
 
 namespace CrudPlay.Infrastructure.Services;
 

@@ -1,6 +1,6 @@
 ﻿using CrudPlay.Core.DTO;
 
-using TodoItem = CrudPlay.Core.Domain.Todo;
+using TodoItem = CrudPlay.Core.Domain.TodoModel;
 
 namespace CrudPlay.Application.Interfaces;
 

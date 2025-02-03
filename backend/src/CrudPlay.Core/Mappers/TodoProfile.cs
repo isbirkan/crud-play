@@ -8,14 +8,14 @@ public class TodoProfile : Profile
 {
     public TodoProfile()
     {
-        CreateMap<Entities.Todo, Domain.Todo>();
+        CreateMap<Entities.TodoEntity, Domain.TodoModel>();
 
-        CreateMap<CreateTodoRequest, Entities.Todo>()
+        CreateMap<CreateTodoRequest, Entities.TodoEntity>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.CreatedAt, o => o.Ignore())
             .ForMember(d => d.UpdatedAt, o => o.Ignore());
 
-        CreateMap<UpdateTodoRequest, Entities.Todo>()
+        CreateMap<UpdateTodoRequest, Entities.TodoEntity>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.Priority, o => o.Ignore())
                 .AfterMap((src, dest) =>

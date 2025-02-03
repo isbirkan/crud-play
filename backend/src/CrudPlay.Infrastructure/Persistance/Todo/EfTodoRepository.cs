@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace CrudPlay.Infrastructure.Persistance;
+namespace CrudPlay.Infrastructure.Persistance.Todo;
 
 public class EfTodoRepository<T>(TodoDbContext context) : IRepository<T> where T : class
 {

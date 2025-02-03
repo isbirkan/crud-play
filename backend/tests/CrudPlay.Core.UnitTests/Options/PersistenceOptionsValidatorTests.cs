@@ -1,6 +1,6 @@
-﻿using CrudPlay.Infrastructure.Options;
+﻿using CrudPlay.Core.Options;
 
-namespace CrudPlay.Infrastructure.UnitTests.Options;
+namespace CrudPlay.Core.UnitTests.Options;
 
 public class PersistenceOptionsValidatorTests
 {

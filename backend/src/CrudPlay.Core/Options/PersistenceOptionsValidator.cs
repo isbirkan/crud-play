@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace CrudPlay.Infrastructure.Options;
+namespace CrudPlay.Core.Options;
 
 public class PersistenceOptionsValidator : IValidateOptions<PersistenceOptions>
 {
-    public ValidateOptionsResult Validate(string name, PersistenceOptions options)
+    public ValidateOptionsResult Validate(string? name, PersistenceOptions options)
     {
         if (options is null)
         {

@@ -8,8 +8,8 @@ using CrudPlay.Infrastructure.Services;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-using TodoEntity = CrudPlay.Core.Entities.Todo;
-using TodoItem = CrudPlay.Core.Domain.Todo;
+using TodoEntity = CrudPlay.Core.Entities.TodoEntity;
+using TodoItem = CrudPlay.Core.Domain.TodoModel;
 
 namespace CrudPlay.Infrastructure.UnitTests.Services;
 

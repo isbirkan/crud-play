@@ -1,20 +1,19 @@
 ﻿using CrudPlay.Core.Entities;
-using CrudPlay.Infrastructure.Persistance;
+using CrudPlay.Infrastructure.Persistance.Todo;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace CrudPlay.Infrastructure.UnitTests.Persistence;
 
 public class EfTodoRepositoryTests
 {
     private readonly TodoDbContext _context;
-    private readonly EfTodoRepository<Todo> _repository;
+    private readonly EfTodoRepository<TodoEntity> _repository;
 
     private static readonly Guid _identifier1 = Guid.NewGuid();
     private static readonly Guid _identifier2 = Guid.NewGuid();
 
-    private readonly Todo _todoEntity1 = new()
+    private readonly TodoEntity _todoEntity1 = new()
     {
         Id = _identifier1,
         Title = "Hit me first!",
@@ -23,7 +22,7 @@ public class EfTodoRepositoryTests
         DueDate = DateTime.MinValue,
         Priority = 1000000
     };
-    private readonly Todo _todoEntity2 = new()
+    private readonly TodoEntity _todoEntity2 = new()
     {
         Id = _identifier2,
         Title = "Do not put me on second place!",
@@ -35,13 +34,10 @@ public class EfTodoRepositoryTests
 
     public EfTodoRepositoryTests()
     {
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection()
-            .Build();
         var options = new DbContextOptionsBuilder<TodoDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        _context = new(options, configuration);
+        _context = new(options);
         _repository = new(_context);
 
         _context.Todos.Add(_todoEntity1);
@@ -90,7 +86,7 @@ public class EfTodoRepositoryTests
     public async Task AddAsync_ShouldAddEntity()
     {
         // Arrange
-        var todo = new Todo()
+        var todo = new TodoEntity()
         {
             Id = Guid.NewGuid(),
             Title = "Third wheel",

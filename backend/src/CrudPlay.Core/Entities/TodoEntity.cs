@@ -2,7 +2,7 @@
 
 namespace CrudPlay.Core.Entities;
 
-public class Todo : BaseEntity
+public class TodoEntity : BaseEntity
 {
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();

@@ -3,8 +3,8 @@
 using CrudPlay.Core.DTO;
 using CrudPlay.Core.Mappers;
 
-using TodoEntity = CrudPlay.Core.Entities.Todo;
-using TodoItem = CrudPlay.Core.Domain.Todo;
+using TodoEntity = CrudPlay.Core.Entities.TodoEntity;
+using TodoItem = CrudPlay.Core.Domain.TodoModel;
 
 namespace CrudPlay.Core.UnitTests.Mappers;
 

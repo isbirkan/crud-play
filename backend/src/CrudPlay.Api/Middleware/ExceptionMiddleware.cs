@@ -46,7 +46,7 @@ public class ExceptionMiddleware(
             NotFoundException notFoundException =>
                 WriteResponse(context, "NotFound", notFoundException.Message, debugInfo, HttpStatusCode.NotFound),
 
-            _ => HandleGenericException(context, exception, debugInfo) // Catch-all for generic errors
+            _ => HandleGenericException(context, exception, debugInfo)
         };
     }
 
