@@ -67,7 +67,7 @@ public static class PersistanceInjection
 
     private static IServiceCollection AddIdentity(this IServiceCollection services, PersistenceOptions? persistenceOptions)
     {
-        services.AddDbContext<ApplicationIdentityDbContext>((serviceProvider, options) =>
+        services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(
                 persistenceOptions?.ConnectionString,

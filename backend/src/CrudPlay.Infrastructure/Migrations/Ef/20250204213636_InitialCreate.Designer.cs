@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudPlay.Infrastructure.Migrations.Ef
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20250203223042_InitialCreate")]
+    [Migration("20250204213636_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

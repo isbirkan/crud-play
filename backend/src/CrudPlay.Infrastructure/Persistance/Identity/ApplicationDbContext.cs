@@ -5,6 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudPlay.Infrastructure.Persistance.Identity;
 
-public class ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
 }

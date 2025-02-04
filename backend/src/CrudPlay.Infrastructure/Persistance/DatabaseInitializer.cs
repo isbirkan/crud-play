@@ -14,7 +14,7 @@ public static class DatabaseInitializer
     public static void InitializeIdentityDatabase(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
-        var identityDbContext = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
+        var identityDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         identityDbContext.Database.Migrate();
     }
@@ -24,7 +24,6 @@ public static class DatabaseInitializer
         using var scope = serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
 
-        //dbContext.Database.EnsureCreated();
         dbContext.Database.Migrate();
     }
 

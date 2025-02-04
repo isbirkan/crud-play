@@ -3,6 +3,7 @@ using Asp.Versioning;
 using CrudPlay.Application.Commands;
 using CrudPlay.Application.Queries;
 using CrudPlay.Core.DTO;
+using CrudPlay.Core.Identity;
 
 using MediatR;
 
@@ -14,7 +15,7 @@ namespace CrudPlay.Api.Controllers.V1;
 [ApiController]
 [ApiVersion("1")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Authorize]
+[Authorize(Roles = RoleConstants.User)]
 public class TodoController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;

@@ -1,9 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 using Asp.Versioning;
 
 using CrudPlay.Api.Helpers;
 using CrudPlay.Api.Middleware;
+using CrudPlay.Api.Services;
 using CrudPlay.Application;
 using CrudPlay.Core;
 using CrudPlay.Core.Identity;
@@ -13,7 +16,6 @@ using CrudPlay.Infrastructure.Persistance.Identity;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 using Scalar.AspNetCore;
@@ -21,20 +23,26 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 AddVersioning(builder.Services);
-builder.Services.AddControllers();
 
 builder.Services.AddCore();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplication();
 
+builder.Services.AddSingleton<ITokenGeneration, TokenGeneration>();
+
 AddAuthenticationWithJwtBearer(builder.Services, builder.Configuration);
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
+builder.Services.AddOpenApi("v1", options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
 
 var app = builder.Build();
 
 PersistanceInjection.InitializeDatabase(app.Services);
+await Seed.AddRolesAndAdminAsync(app.Services);
 app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -53,14 +61,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app
-    .MapGroup("/api/auth")
-    .MapIdentityApi<ApplicationUser>()
-    .WithTags("Authentication")
-    .WithOpenApi();
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseAuthorization();
 app.MapControllers();
 
 await app.RunAsync();
@@ -87,13 +89,11 @@ void AddVersioning(IServiceCollection services)
 
 void AddAuthenticationWithJwtBearer(IServiceCollection services, IConfiguration configuration)
 {
-    var jwtOptions = configuration.GetSection("JwtConfiguration").Get<JwtOptions>();
+    var jwtConfiguration = configuration.GetSection("JwtConfiguration").Get<JwtOptions>();
 
     services
-        .AddIdentityApiEndpoints<ApplicationUser>(options =>
+        .AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
-
-
             options.Password.RequiredLength = 8;
             options.Password.RequireDigit = true;
             options.Password.RequireLowercase = true;
@@ -103,27 +103,26 @@ void AddAuthenticationWithJwtBearer(IServiceCollection services, IConfiguration 
             options.User.RequireUniqueEmail = true;
 
             options.ClaimsIdentity.UserIdClaimType = JwtRegisteredClaimNames.Sub;
+            options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
         })
-        .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
+
+    services.AddSingleton<IEmailSender<ApplicationUser>, FalseEmailSender>();
 
     services
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            options.SaveToken = true;
-            options.RequireHttpsMetadata = false;
-
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtOptions.Issuer,
-                ValidAudience = jwtOptions.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
-                ClockSkew = TimeSpan.Zero
+                ValidIssuer = jwtConfiguration.Issuer,
+                ValidAudience = jwtConfiguration.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.SecretKey)),
             };
 
             options.Events = new JwtBearerEvents
@@ -135,6 +134,4 @@ void AddAuthenticationWithJwtBearer(IServiceCollection services, IConfiguration 
                 }
             };
         });
-
-    services.AddAuthorization();
 }

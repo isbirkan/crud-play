@@ -14,7 +14,6 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
@@ -35,6 +34,7 @@
   <ItemGroup>
     <Folder Include="Migrations\Ef\" />
     <Folder Include="Migrations\Dapper\" />
+    <Folder Include="Migrations\Identity\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
 
