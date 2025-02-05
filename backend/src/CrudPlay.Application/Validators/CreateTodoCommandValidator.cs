@@ -10,12 +10,12 @@ public class CreateTodoCommandValidator : ICreateTodoCommandValidator
     {
         if (string.IsNullOrWhiteSpace(command?.Request.Title))
         {
-            throw new ApplicationValidatorException("Todo Title cannot be null");
+            throw new ApplicationValidatorException("Todo Title cannot be null or empty");
         }
 
         if (string.IsNullOrWhiteSpace(command?.Request.Description))
         {
-            throw new ApplicationValidatorException("Todo Description cannot be null");
+            throw new ApplicationValidatorException("Todo Description cannot be null or empty");
         }
     }
 }

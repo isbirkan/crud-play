@@ -40,6 +40,9 @@ public class ExceptionMiddleware(
             ApplicationValidatorException applicationValidatorException =>
                 WriteResponse(context, "Validation", applicationValidatorException.Message, debugInfo, HttpStatusCode.BadRequest),
 
+            ArgumentException argumentException =>
+                WriteResponse(context, "Argument", argumentException.Message, debugInfo, HttpStatusCode.BadRequest),
+
             ForbiddenException =>
                 WriteResponse(context, "Forbidden", string.Empty, debugInfo, HttpStatusCode.Forbidden),
 

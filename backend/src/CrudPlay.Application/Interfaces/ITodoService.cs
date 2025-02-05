@@ -10,6 +10,8 @@ public interface ITodoService
 
     Task<TodoItem> GetByIdAsync(string id, CancellationToken cancellationToken);
 
+    Task<IEnumerable<TodoItem>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
+
     Task CreateAsync(CreateTodoRequest request, CancellationToken cancellationToken);
 
     Task UpdateAsync(string id, UpdateTodoRequest request, CancellationToken cancellationToken);

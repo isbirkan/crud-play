@@ -2,7 +2,7 @@
 using CrudPlay.Application.Validators;
 using CrudPlay.Core.Exceptions;
 
-namespace CrudPlay.Application.Tests.Validators;
+namespace CrudPlay.Application.UnitTests.Validators;
 
 public class GetTodoByIdQueryValidatorTests
 {

@@ -1,5 +1,3 @@
 ﻿namespace CrudPlay.Core.Exceptions;
 
-public class ForbiddenException : Exception
-{
-}
+public class ForbiddenException : Exception { }

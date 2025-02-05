@@ -13,6 +13,7 @@ public static class ApplicationInjection
         services.AddMediatR(config => config.RegisterServicesFromAssemblies(typeof(GetTodosQuery).Assembly));
 
         services.AddSingleton<IGetTodoByIdQueryValidator, GetTodoByIdQueryValidator>();
+        services.AddSingleton<IGetTodosByUserIdQueryValidator, GetTodosByUserIdQueryValidator>();
         services.AddSingleton<ICreateTodoCommandValidator, CreateTodoCommandValidator>();
         services.AddSingleton<IUpdateTodoCommandValidator, UpdateTodoCommandValidator>();
         services.AddSingleton<IDeleteTodoCommandValidator, DeleteTodoCommandValidator>();

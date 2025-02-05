@@ -5,9 +5,10 @@ BEGIN
     SELECT Id, 
            Title, 
            Description, 
-           IsCompleted, 
+           IsCompleted,
            DueDate, 
            Priority,
+           UserId,
            CreatedAt, 
            UpdatedAt 
     FROM dbo.Todos;
@@ -22,9 +23,10 @@ BEGIN
     SELECT Id, 
            Title, 
            Description, 
-           IsCompleted, 
+           IsCompleted,
            DueDate, 
            Priority,
+           UserId,
            CreatedAt, 
            UpdatedAt 
     FROM dbo.Todos
@@ -32,13 +34,37 @@ BEGIN
 END;
 GO
 
+-- Get Todo by Property
+CREATE OR ALTER PROCEDURE GetTodoByProperty
+    @PropertyName NVARCHAR(100),
+    @PropertyValue NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @Sql NVARCHAR(MAX);
+    
+    IF @PropertyName NOT IN ('Id', 'Title', 'Description', 'IsCompleted', 'DueDate', 'Priority', 'UserId', 'CreatedAt', 'UpdatedAt')
+    BEGIN
+        RAISERROR('Invalid column name.', 16, 1);
+        RETURN;
+    END;
+
+    SET @Sql = 'SELECT Id, Title, Description, IsCompleted, DueDate, Priority, UserId, CreatedAt, UpdatedAt 
+                FROM dbo.Todos 
+                WHERE ' + QUOTENAME(@PropertyName) + ' = @PropertyValue';
+
+    EXEC sp_executesql @Sql, N'@PropertyValue NVARCHAR(MAX)', @PropertyValue;
+END;
+GO
+
+
 -- Insert Todo
 CREATE OR ALTER PROCEDURE AddTodo
     @Id UNIQUEIDENTIFIER,
     @Title NVARCHAR(MAX),
     @Description NVARCHAR(MAX),
     @DueDate DATETIME2,
-    @Priority INT
+    @Priority INT,
+    @UserId NVARCHAR(MAX)
 AS
 BEGIN
     INSERT INTO dbo.Todos 
@@ -49,6 +75,7 @@ BEGIN
         IsCompleted,
         DueDate,
         Priority,
+        UserId,
         CreatedAt,
         UpdatedAt
     ) 
@@ -60,6 +87,7 @@ BEGIN
         0,
         @DueDate,
         @Priority,
+        @UserId,
         GETUTCDATE(),
         GETUTCDATE()
     );
@@ -73,7 +101,8 @@ CREATE OR ALTER PROCEDURE UpdateTodo
     @Description NVARCHAR(MAX),
     @IsCompleted BIT,
     @DueDate DATETIME2,
-    @Priority INT
+    @Priority INT,
+    @UserId NVARCHAR(MAX)
 AS
 BEGIN
     UPDATE dbo.Todos
@@ -83,6 +112,7 @@ BEGIN
         IsCompleted = @IsCompleted,
         DueDate = @DueDate,
         Priority = @Priority,
+        UserId = @UserId,
         UpdatedAt = GETUTCDATE()
     WHERE Id = @Id;
 END;

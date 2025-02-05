@@ -32,6 +32,9 @@ public class TodoController(IMediator mediator) : ControllerBase
         return Ok(await _mediator.Send(new GetTodoByIdQuery(id), cancellationToken));
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetByUserIdAsync([FromQuery] string userId, CancellationToken cancellationToken)
+        => Ok(await _mediator.Send(new GetTodosByUserIdQuery(userId), cancellationToken));
 
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateTodoRequest request, CancellationToken cancellationToken)

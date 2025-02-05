@@ -1,4 +1,7 @@
-﻿using CrudPlay.Infrastructure.Interfaces;
+﻿using System.Linq.Expressions;
+
+using CrudPlay.Infrastructure.Interfaces;
+using CrudPlay.Infrastructure.Persistance.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +14,16 @@ public class EfTodoRepository<T>(TodoDbContext context) : IRepository<T> where T
     public async Task<IEnumerable<T>> GetListAsync(CancellationToken cancellationToken) => await _context.Set<T>().ToListAsync(cancellationToken: cancellationToken);
 
     public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _context.Set<T>().FindAsync([id], cancellationToken: cancellationToken) ?? null;
+
+    public async Task<IEnumerable<T>> GetByPropertyAsync<TProperty>(
+        Expression<Func<T, TProperty>> propertySelector,
+        TProperty value,
+        CancellationToken cancellationToken)
+    {
+        return await _context.Set<T>()
+            .Where(entity => EF.Property<TProperty>(entity, propertySelector.GetPropertyName())!.Equals(value))
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken)
     {

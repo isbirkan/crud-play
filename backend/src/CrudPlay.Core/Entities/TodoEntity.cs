@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CrudPlay.Core.Identity;
+
 namespace CrudPlay.Core.Entities;
 
 public class TodoEntity : BaseEntity
@@ -16,4 +18,8 @@ public class TodoEntity : BaseEntity
     public DateTime? DueDate { get; set; }
 
     public int Priority { get; set; }
+
+    public string UserId { get; set; } = string.Empty;
+
+    public ApplicationUser User { get; set; } = null!;
 }

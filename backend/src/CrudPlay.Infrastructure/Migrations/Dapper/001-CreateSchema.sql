@@ -12,8 +12,13 @@ BEGIN
         IsCompleted BIT NOT NULL,
         DueDate DATETIME2 NULL,
         Priority INT NOT NULL,
+        UserId NVARCHAR(MAX) NOT NULL,
         CreatedAt DATETIME2 NULL,
-        UpdatedAt DATETIME2 NULL
+        UpdatedAt DATETIME2 NULL,
+
+        CONSTRAINT FK_Todos_AspNetUsers FOREIGN KEY (UserId) 
+        REFERENCES dbo.AspNetUsers(Id) 
+        ON DELETE CASCADE
     );
 END;
 GO

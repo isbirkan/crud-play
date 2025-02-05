@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+
+using AutoMapper;
 
 using CrudPlay.Core.DTO;
 using CrudPlay.Core.Exceptions;
@@ -29,7 +31,8 @@ public class TodoServiceTests
         Description = "Do I really need one?",
         IsCompleted = false,
         DueDate = DateTime.MinValue,
-        Priority = 1
+        Priority = 1,
+        UserId = "123-come-with-me"
     };
 
     private readonly TodoEntity _todoEntity2 = new()
@@ -39,7 +42,8 @@ public class TodoServiceTests
         Description = "Still the same Dre",
         IsCompleted = true,
         DueDate = DateTime.MaxValue,
-        Priority = 9000
+        Priority = 9000,
+        UserId = "456-theres-no-fix"
     };
 
     public TodoServiceTests()
@@ -165,6 +169,68 @@ public class TodoServiceTests
         Assert.False(result.IsCompleted);
         Assert.Equal(DateTime.MinValue, result.DueDate);
         Assert.Equal(1, result.Priority);
+    }
+
+    [Fact]
+    public async Task GetByUserIdAsync_RepositoryFailure_ShouldThrowException()
+    {
+        // Arrange
+        _repository.GetByPropertyAsync(Arg.Any<Expression<Func<TodoEntity, string>>>(), _todoEntity1.UserId, Arg.Any<CancellationToken>())
+            .ThrowsAsync(new Exception("An error occurred while retrieving the Todos list for user"));
+
+        // Act
+        var exception = await Assert.ThrowsAsync<Exception>(async () =>
+            await _service.GetByUserIdAsync(_todoEntity1.UserId, CancellationToken.None));
+
+        // Assert
+        Assert.Equal("An error occurred while retrieving the Todos list for user", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetByUserIdAsync_TodoListEmpty_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        _repository.GetByPropertyAsync(Arg.Any<Expression<Func<TodoEntity, string>>>(), _todoEntity1.UserId, Arg.Any<CancellationToken>()).Returns([]);
+
+        // Act
+        var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _service.GetByUserIdAsync(_todoEntity1.UserId, CancellationToken.None));
+
+        // Assert
+        Assert.Equal("No Todo items found", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetByUserIdAsync_ResponseSuccess_ShouldReturnMappedTodoList()
+    {
+        // Arrange
+        var todoListEntity = new List<TodoEntity> { _todoEntity1, _todoEntity2 };
+
+        _mapper.Map<IEnumerable<TodoItem>>(Arg.Any<IEnumerable<TodoEntity>>())
+            .Returns(todoListEntity.Select(entity => new TodoItem
+            (
+                entity.Id.ToString(),
+                entity.Title,
+                entity.Description,
+                entity.IsCompleted,
+                entity.DueDate,
+                entity.Priority
+            )));
+        _repository.GetByPropertyAsync(Arg.Any<Expression<Func<TodoEntity, string>>>(), _todoEntity1.UserId, Arg.Any<CancellationToken>()).Returns(todoListEntity);
+
+        // Act
+        var result = await _service.GetByUserIdAsync(_todoEntity1.UserId, CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
+
+        var todoListModel = result.ToList();
+        Assert.Equal("First in line", todoListModel[0].Title);
+        Assert.Equal("Do I really need one?", todoListModel[0].Description);
+        Assert.False(todoListModel[0].IsCompleted);
+        Assert.Equal(DateTime.MinValue, todoListModel[0].DueDate);
+        Assert.Equal(1, todoListModel[0].Priority);
     }
 
     [Fact]

@@ -1,7 +1,9 @@
 ﻿
 using System.Data;
+using System.Linq.Expressions;
 
 using CrudPlay.Infrastructure.Interfaces;
+using CrudPlay.Infrastructure.Persistance.Extensions;
 
 using Dapper;
 
@@ -16,6 +18,20 @@ public class DapperRepository<T>(IDbConnection dbConnection) : IRepository<T> wh
 
     public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
         await _dbConnection.QueryFirstOrDefaultAsync<T>("GetTodoById", new { Id = id }, commandType: CommandType.StoredProcedure);
+
+    public async Task<IEnumerable<T>> GetByPropertyAsync<TProperty>(
+        Expression<Func<T, TProperty>> propertySelector,
+        TProperty value,
+        CancellationToken cancellationToken)
+    {
+        string propertyName = propertySelector.GetPropertyName();
+
+        return await _dbConnection.QueryAsync<T>(
+            "GetTodoByProperty",
+            new { PropertyName = propertyName, PropertyValue = value },
+            commandType: CommandType.StoredProcedure
+        );
+    }
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken) =>
         await _dbConnection.ExecuteAsync("AddTodo", new DynamicParameters(entity), commandType: CommandType.StoredProcedure);

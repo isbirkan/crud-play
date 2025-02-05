@@ -26,7 +26,7 @@ public class PersistenceOptionsValidatorTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Validate_PersistenceOptions_ConnectionStringNullOrEmptyOrWhitespace_ShouldReturnValidationResultFail(string connectionString)
+    public void Validate_PersistenceOptions_ConnectionStringNullOrEmptyOrWhitespace_ShouldReturnValidationResultFail(string? connectionString)
     {
         // Arrange
         _options.ConnectionString = connectionString;

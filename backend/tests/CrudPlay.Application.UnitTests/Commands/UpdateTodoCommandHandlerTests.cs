@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
-namespace CrudPlay.Application.Tests.Commands;
+namespace CrudPlay.Application.UnitTests.Commands;
 
 public class UpdateTodoCommandHandlerTests
 {
@@ -33,7 +33,7 @@ public class UpdateTodoCommandHandlerTests
             "I would like a new title, please!",
             "Can you describe me better?",
             true,
-            new DateTime(3025, 1, 1),
+            new DateTime(3025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             999);
         var command = new UpdateTodoCommand(identifier, request);
         var cancellationToken = new CancellationToken();

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
-namespace CrudPlay.Application.Tests.Queries;
+namespace CrudPlay.Application.UnitTests.Queries;
 
 public class GetTodoByIdQueryHandlerTests
 {

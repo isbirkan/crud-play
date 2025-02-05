@@ -178,6 +178,72 @@ public class ExceptionMiddlewareTests
     }
 
     [Fact]
+    public async Task ExceptionMiddleware_ArgumentExceptionException_EnvNotDevelopment_ShouldLogAndReturnTypeAndMessage()
+    {
+        // Arrange
+        var logger = Substitute.For<ILogger<ExceptionMiddleware>>();
+        var env = Substitute.For<IWebHostEnvironment>();
+        env.EnvironmentName.Returns("NotDevelopment");
+
+        var defaultContext = new DefaultHttpContext();
+        defaultContext.Response.Body = new MemoryStream();
+        defaultContext.Request.Path = "/";
+
+        // Act
+        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        {
+            throw new ArgumentException("ArgumentException message");
+        }, logger, env);
+
+        await middlewareInstance.InvokeAsync(defaultContext);
+
+        // Assert
+        defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
+        var body = await new StreamReader(defaultContext.Response.Body).ReadToEndAsync();
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(body);
+
+        Assert.Equal((int)HttpStatusCode.BadRequest, defaultContext.Response.StatusCode);
+        Assert.Equal("Argument", errorResponse.Type);
+        Assert.Equal("ArgumentException message", errorResponse.Message);
+        Assert.Null(errorResponse.DebugInfo);
+
+        logger.ReceivedWithAnyArgs().Log(default, default, default, default, default);
+    }
+
+    [Fact]
+    public async Task ExceptionMiddleware_ArgumentExceptionException_EnvDevelopment_ShouldLogAndReturnTypeAndMessageAndDebugInfo()
+    {
+        // Arrange
+        var logger = Substitute.For<ILogger<ExceptionMiddleware>>();
+        var env = Substitute.For<IWebHostEnvironment>();
+        env.EnvironmentName.Returns("Development");
+
+        var defaultContext = new DefaultHttpContext();
+        defaultContext.Response.Body = new MemoryStream();
+        defaultContext.Request.Path = "/";
+
+        // Act
+        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        {
+            throw new ArgumentException("ArgumentException message");
+        }, logger, env);
+
+        await middlewareInstance.InvokeAsync(defaultContext);
+
+        // Assert
+        defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
+        var body = await new StreamReader(defaultContext.Response.Body).ReadToEndAsync();
+        var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(body);
+
+        Assert.Equal((int)HttpStatusCode.BadRequest, defaultContext.Response.StatusCode);
+        Assert.Equal("Argument", errorResponse.Type);
+        Assert.Equal("ArgumentException message", errorResponse.Message);
+        Assert.NotNull(errorResponse.DebugInfo);
+
+        logger.ReceivedWithAnyArgs().Log(default, default, default, default, default);
+    }
+
+    [Fact]
     public async Task ExceptionMiddleware_NotFoundException_EnvNotDevelopment_ShouldLogAndReturnType()
     {
         // Arrange

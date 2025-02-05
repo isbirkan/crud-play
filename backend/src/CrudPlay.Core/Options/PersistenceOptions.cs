@@ -2,9 +2,9 @@
 
 public class PersistenceOptions
 {
-    public string ConnectionString { get; set; } = string.Empty;
+    public string? ConnectionString { get; set; } = string.Empty;
 
-    private string _implementation = "EntityFramework";
+    private string? _implementation = "EntityFramework";
 
     public ImplementationType Implementation
     {

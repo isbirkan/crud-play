@@ -2,7 +2,7 @@
 using CrudPlay.Application.Validators;
 using CrudPlay.Core.Exceptions;
 
-namespace CrudPlay.Application.Tests.Validators;
+namespace CrudPlay.Application.UnitTests.Validators;
 
 public class CreateTodoCommandValidatorTests
 {
@@ -22,7 +22,7 @@ public class CreateTodoCommandValidatorTests
 
         // Assert
         var exception = Assert.Throws<ApplicationValidatorException>(action);
-        Assert.Equal("Todo Title cannot be null", exception.Message);
+        Assert.Equal("Todo Title cannot be null or empty", exception.Message);
     }
 
     [Theory]
@@ -39,6 +39,6 @@ public class CreateTodoCommandValidatorTests
 
         // Assert
         var exception = Assert.Throws<ApplicationValidatorException>(action);
-        Assert.Equal("Todo Description cannot be null", exception.Message);
+        Assert.Equal("Todo Description cannot be null or empty", exception.Message);
     }
 }

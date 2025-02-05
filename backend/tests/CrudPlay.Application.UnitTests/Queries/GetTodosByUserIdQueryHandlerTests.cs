@@ -1,5 +1,6 @@
 ﻿using CrudPlay.Application.Interfaces;
 using CrudPlay.Application.Queries;
+using CrudPlay.Application.Validators.Interfaces;
 
 using Microsoft.Extensions.Logging;
 
@@ -7,27 +8,30 @@ using NSubstitute;
 
 namespace CrudPlay.Application.UnitTests.Queries;
 
-public class GetTodosQueryHandlerTests
+public class GetTodosByUserIdQueryHandlerTests
 {
-    private readonly ILogger<GetTodosQueryHandler> _logger;
+    private readonly ILogger<GetTodosByUserIdQueryHandler> _logger;
+    private readonly IGetTodosByUserIdQueryValidator _validator;
     private readonly ITodoService _service;
-    private readonly GetTodosQueryHandler _handler;
+    private readonly GetTodosByUserIdQueryHandler _handler;
 
-    public GetTodosQueryHandlerTests()
+    public GetTodosByUserIdQueryHandlerTests()
     {
-        _logger = Substitute.For<ILogger<GetTodosQueryHandler>>();
+        _logger = Substitute.For<ILogger<GetTodosByUserIdQueryHandler>>();
+        _validator = Substitute.For<IGetTodosByUserIdQueryValidator>();
         _service = Substitute.For<ITodoService>();
-        _handler = new(_logger, _service);
+        _handler = new(_logger, _validator, _service);
     }
 
     [Fact]
-    public async Task Handle_ValidationSuccess_ShouldReturnTodoList()
+    public async Task Handle_ValidationSuccess_UserIdMatches_ShouldReturnTodoList()
     {
         // Arrange
-        var query = new GetTodosQuery();
+        var userId = "use-my-id";
+        var query = new GetTodosByUserIdQuery(userId);
         var cancellationToken = new CancellationToken();
 
-        _service.GetAllAsync(cancellationToken).Returns(
+        _service.GetByUserIdAsync(userId, cancellationToken).Returns(
             [
                 new(
                     "number-one-id",
@@ -64,5 +68,22 @@ public class GetTodosQueryHandlerTests
         Assert.True(todoList[1].IsCompleted);
         Assert.Null(todoList[1].DueDate);
         Assert.Equal(0, todoList[1].Priority);
+    }
+
+    [Fact]
+    public async Task Handle_ValidationSuccess_UserIdDoesNotMatch_ShouldReturnEmptyList()
+    {
+        // Arrange
+        var userId = "number-one-id";
+        var query = new GetTodosByUserIdQuery(userId);
+        var cancellationToken = new CancellationToken();
+
+        _service.GetByUserIdAsync(userId, cancellationToken).Returns([]);
+
+        // Act
+        var result = await _handler.Handle(query, cancellationToken);
+
+        // Assert
+        Assert.Empty(result);
     }
 }

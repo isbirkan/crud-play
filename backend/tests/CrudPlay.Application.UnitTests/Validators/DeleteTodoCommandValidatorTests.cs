@@ -2,7 +2,7 @@
 using CrudPlay.Application.Validators;
 using CrudPlay.Core.Exceptions;
 
-namespace CrudPlay.Application.Tests.Validators;
+namespace CrudPlay.Application.UnitTests.Validators;
 
 public class DeleteTodoCommandValidatorTests
 {
@@ -22,7 +22,7 @@ public class DeleteTodoCommandValidatorTests
 
         // Assert
         var exception = Assert.Throws<ApplicationValidatorException>(action);
-        Assert.Equal("Identifier must not be null", exception.Message);
+        Assert.Equal("Identifier cannot be null or empty", exception.Message);
     }
 
     [Fact]

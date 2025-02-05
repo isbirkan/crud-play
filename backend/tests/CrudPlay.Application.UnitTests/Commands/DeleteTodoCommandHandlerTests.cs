@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
-namespace CrudPlay.Application.Tests.Commands;
+namespace CrudPlay.Application.UnitTests.Commands;
 
 public class DeleteTodoCommandHandlerTests
 {

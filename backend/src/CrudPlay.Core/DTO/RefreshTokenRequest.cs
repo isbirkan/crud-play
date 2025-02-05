@@ -1,6 +1,3 @@
 ﻿namespace CrudPlay.Core.DTO;
 
-public class RefreshTokenRequest
-{
-    public string? RefreshToken { get; set; }
-}
+public record RefreshTokenRequest(string? RefreshToken);

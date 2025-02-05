@@ -20,8 +20,8 @@ public class TodoProfileTests
         IsCompleted = false,
         DueDate = DateTime.MinValue,
         Priority = 23,
-        CreatedAt = new DateTime(2077, 1, 1),
-        UpdatedAt = new DateTime(2077, 1, 2),
+        CreatedAt = new DateTime(2077, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+        UpdatedAt = new DateTime(2077, 1, 2, 0, 0, 0, DateTimeKind.Utc)
     };
 
     public TodoProfileTests()
@@ -90,8 +90,8 @@ public class TodoProfileTests
         Assert.True(_todoEntity.IsCompleted);
         Assert.Equal(updateTodoRequest.DueDate, _todoEntity.DueDate);
         Assert.Equal(updateTodoRequest.Priority, _todoEntity.Priority);
-        Assert.Equal(new DateTime(2077, 1, 1), _todoEntity.CreatedAt);
-        Assert.Equal(new DateTime(2077, 1, 2), _todoEntity.UpdatedAt);
+        Assert.Equal(new DateTime(2077, 1, 1, 0, 0, 0, DateTimeKind.Utc), _todoEntity.CreatedAt);
+        Assert.Equal(new DateTime(2077, 1, 2, 0, 0, 0, DateTimeKind.Utc), _todoEntity.UpdatedAt);
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class TodoProfileTests
         Assert.False(_todoEntity.IsCompleted);
         Assert.Equal(DateTime.MinValue, _todoEntity.DueDate);
         Assert.Equal(23, _todoEntity.Priority);
-        Assert.Equal(new DateTime(2077, 1, 1), _todoEntity.CreatedAt);
-        Assert.Equal(new DateTime(2077, 1, 2), _todoEntity.UpdatedAt);
+        Assert.Equal(new DateTime(2077, 1, 1, 0, 0, 0, DateTimeKind.Utc), _todoEntity.CreatedAt);
+        Assert.Equal(new DateTime(2077, 1, 2, 0, 0, 0, DateTimeKind.Utc), _todoEntity.UpdatedAt);
     }
 }

@@ -52,12 +52,12 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options =>
     {
         options
-        .WithTitle("CrudPlay API")
-        .WithHttpBearerAuthentication(bearer =>
-        {
-            bearer.Token = "bear-my-token";
-        })
-        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+            .WithTitle("CrudPlay API")
+            .WithHttpBearerAuthentication(bearer =>
+            {
+                bearer.Token = "bear-my-token";
+            })
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
 
@@ -77,8 +77,7 @@ void AddVersioning(IServiceCollection services)
             options.ReportApiVersions = true;
             options.ApiVersionReader = ApiVersionReader.Combine(
             new UrlSegmentApiVersionReader(),
-            new HeaderApiVersionReader("X-Api-Version")
-            );
+            new HeaderApiVersionReader("X-Api-Version"));
         })
         .AddApiExplorer(options =>
         {

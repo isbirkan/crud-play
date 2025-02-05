@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudPlay.Api.Controllers;
 
+//TODO: Move service call to orchestrator
+//TODO: Add commands through MediatR
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController(
@@ -35,6 +37,11 @@ public class AuthController(
         }
 
         var user = await _userManager.FindByNameAsync(request.Email);
+        if (user is null)
+        {
+            return Unauthorized("Invalid login attempt");
+        }
+
         var token = _tokenGeneration.GenerateJwtToken(user);
         var refreshToken = _tokenGeneration.GenerateRefreshToken();
 
@@ -55,7 +62,9 @@ public class AuthController(
 
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
+        {
             return BadRequest(result.Errors);
+        }
 
         await _userManager.AddToRoleAsync(user, RoleConstants.User);
 
@@ -68,8 +77,10 @@ public class AuthController(
     {
         var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
 
-        if (user == null || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        if (user is null || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        {
             return Unauthorized("Invalid or expired refresh token");
+        }
 
         var newAccessToken = _tokenGeneration.GenerateJwtToken(user);
         var newRefreshToken = _tokenGeneration.GenerateRefreshToken();
@@ -101,6 +112,7 @@ public class AuthController(
             return BadRequest("User already has this role");
 
         await _userManager.AddToRoleAsync(user, request.Role);
+
         return Ok($"Role {request.Role} assigned to {request.Email}");
     }
 }

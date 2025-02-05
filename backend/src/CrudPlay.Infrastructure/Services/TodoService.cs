@@ -28,6 +28,12 @@ public class TodoService(IMapper mapper, IRepository<TodoEntity> repository) : I
         return todo is null ? throw new NotFoundException("No corresponding Todo item found") : _mapper.Map<TodoItem>(todo);
     }
 
+    public async Task<IEnumerable<TodoItem>> GetByUserIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        var todos = await _repository.GetByPropertyAsync(t => t.UserId, userId, cancellationToken);
+        return (todos is null || !todos.Any()) ? throw new NotFoundException("No Todo items found") : _mapper.Map<IEnumerable<TodoItem>>(todos);
+    }
+
     public async Task CreateAsync(CreateTodoRequest request, CancellationToken cancellationToken)
     {
         var todo = _mapper.Map<TodoEntity>(request);

@@ -10,7 +10,7 @@ public class DeleteTodoCommandValidator : IDeleteTodoCommandValidator
     {
         if (string.IsNullOrWhiteSpace(command.Id))
         {
-            throw new ApplicationValidatorException("Identifier must not be null");
+            throw new ApplicationValidatorException("Identifier cannot be null or empty");
         }
 
         if (!Guid.TryParse(command.Id, out _))
