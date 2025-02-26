@@ -37,12 +37,5 @@
 }
 
 @layer components {
-  .crud-input {
-    @apply block w-full rounded-lg border border-violet-200 bg-gray-50 p-2.5 text-foreground dark:border-violet-400 dark:bg-gray-700 dark:text-foreground dark:placeholder-gray-400;
-
-    &:focus {
-      @apply ring-yellow-600 border-yellow-600 dark:border-blue-500 dark:ring-blue-500;
-    }
-  }
 }
 

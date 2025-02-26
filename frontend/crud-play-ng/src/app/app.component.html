@@ -1,38 +1,57 @@
 <style></style>
 
 <main class="">
-  <section>
-    <div
-      class="w-full rounded-lg bg-gray-600 shadow sm:max-w-md md:mt-0 xl:p-0 dark:border dark:border-violet-400 dark:bg-violet-700"
-    >
-      <div class="space-y-4 p-6 sm:p-8 md:space-y-6">
-        <h1
-          class="font-aller text-xl font-bold leading-tight tracking-tight text-background md:text-2xl dark:text-foreground"
-        >
-          Sign in to your account
-        </h1>
-        <form class="space-y-4 uppercase md:space-y-6" action="#">
-          <div>
-            <label for="email" class="auth-label">email</label>
-            <input type="email" name="email" id="email" class="crud-input" placeholder="play@crud.ng" required="" />
+  <section class="relative py-3 sm:mx-auto sm:max-w-xl">
+    <div class="card-cover"></div>
+    <div class="card">
+      <div class="mx-auto max-w-md">
+        <div>
+          <h1 class="font-aller text-2xl font-semibold leading-tight tracking-tight">Sign in to your account</h1>
+        </div>
+        <div class="divide-y">
+          <div class="auth-group">
+            <div class="relative">
+              <input
+                autocomplete="off"
+                id="email"
+                name="email"
+                type="text"
+                class="auth-input peer"
+                placeholder="crud@play.ng"
+              />
+              <label
+                for="email"
+                class="auth-label peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-600 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600 dark:peer-placeholder-shown:text-gray-400 dark:peer-focus:text-gray-300"
+                >Email Address</label
+              >
+            </div>
+            <div class="relative">
+              <input
+                autocomplete="off"
+                id="password"
+                name="password"
+                type="password"
+                class="auth-input peer"
+                placeholder="Password"
+              />
+              <label
+                for="password"
+                class="auth-label peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-600 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600 dark:peer-placeholder-shown:text-gray-400 dark:peer-focus:text-gray-300"
+                >Password</label
+              >
+            </div>
+            <div class="relative">
+              <button class="auth-button">Sign In</button>
+            </div>
           </div>
-          <div>
-            <label for="password" class="auth-label">password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              class="crud-input"
-              required=""
-            />
-          </div>
-          <button type="button" class="auth-button">Sign in</button>
-          <p class="text-sm font-light text-background dark:text-foreground">
+        </div>
+        <div class="relative">
+          <p class="text-sm font-light text-gray-900 dark:text-foreground">
             Don’t have an account yet?
-            <a href="#" class="dark:text-primary-500 font-medium text-yellow-200 hover:underline">Sign up</a>
+            <a href="#" class="font-medium uppercase text-violet-600 hover:underline dark:text-yellow-200">Sign Up</a>
+            <i class="fa-solid fa-plane ml-1 -rotate-90 text-violet-600 dark:text-yellow-200"></i>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   </section>
