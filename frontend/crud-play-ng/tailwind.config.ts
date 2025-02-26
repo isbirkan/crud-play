@@ -7,6 +7,12 @@ export default {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)'
+      },
+      fontFamily: {
+        roboto: ['Roboto', 'sans-serif'],
+        bebas: ['"Bebas Neue"', 'cursive'],
+        dancing: ['"Dancing Script"', 'sans-serif'],
+        aller: ['Aller', 'sans-serif']
       }
     }
   },

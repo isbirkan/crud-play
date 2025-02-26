@@ -1,0 +1,7 @@
+.auth-button {
+  @apply w-full rounded-lg bg-blue-600 px-5 py-2.5 text-center font-aller text-sm font-bold uppercase text-background hover:bg-blue-500 focus:outline-none focus:ring-4 dark:bg-violet-900 dark:text-foreground dark:hover:bg-violet-800;
+}
+
+.auth-label {
+  @apply mb-2 block text-sm font-medium text-background dark:text-foreground;
+}

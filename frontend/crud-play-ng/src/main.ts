@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import '@angular/compiler';
 import { bootstrapApplication } from '@angular/platform-browser';
 
+import { AppComponent } from '@/app/app.component';
+import { appConfig } from '@/app/app.config';
 import { environment } from '@/environments/environment';
-
-import { AppComponent } from './app/app.component';
-import { appConfig } from './app/app.config';
 
 if (environment.production) {
   console.log = function () {};
