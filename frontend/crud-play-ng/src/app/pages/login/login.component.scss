@@ -19,5 +19,5 @@
 }
 
 .auth-button {
-  @apply rounded-md bg-violet-600 px-5 py-2.5 text-center font-aller text-sm font-bold uppercase text-background dark:text-foreground hover:bg-violet-500 focus:outline-none focus:ring-4;
+  @apply cursor-pointer rounded-md bg-violet-600 px-5 py-2.5 text-center font-aller text-sm font-bold uppercase text-background hover:bg-violet-500 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:bg-violet-300 dark:text-foreground;
 }

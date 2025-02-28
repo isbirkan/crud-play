@@ -1,0 +1,27 @@
+.navbar {
+  @apply fixed left-0 right-0 top-0 z-10 flex w-full flex-wrap justify-between border-b border-violet-600 bg-gray-900/80 px-4 py-4 shadow-md backdrop-blur-md md:flex-row md:justify-around md:px-0;
+}
+
+.hamburger-button {
+  @apply ml-3 inline-flex items-center rounded-lg p-2 text-sm text-gray-100 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 dark:text-gray-400;
+}
+
+.navigation-menu-list {
+    @apply flex flex-col items-center space-y-2 pt-4 text-gray-100 md:flex-row md:space-x-8 md:space-y-0 md:pt-0;
+}
+
+.nagivation-link {
+  @apply flex cursor-pointer transition-colors duration-300 hover:border-b hover:border-gray-100 hover:text-violet-500;
+}
+
+.navigation-link-account {
+  @apply flex cursor-pointer transition-colors duration-300 hover:text-violet-500;
+}
+
+.navigation-link-account-hidden {
+  @apply navigation-link-account md:hidden;
+}
+
+.navigation-link-active {
+  @apply border-b border-violet-600 font-semibold;
+}

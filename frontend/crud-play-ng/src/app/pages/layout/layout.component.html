@@ -1,0 +1,76 @@
+<header>
+  <nav class="navbar">
+    <!-- Logo -->
+    <div class="flex items-center">
+      <a class="cursor-pointer">
+        <h3 class="font-bebas text-4xl text-gray-100">_TODO.NG</h3>
+      </a>
+    </div>
+
+    <!-- Toggle Mobile Menu -->
+    <div class="flex items-center md:hidden">
+      <button id="menu-toggle" type="button" (click)="isMobileMenuOpen = !isMobileMenuOpen" class="hamburger-button">
+        <span class="sr-only">Open main menu</span>
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menu -->
+    <div
+      [class.max-h-96]="isMobileMenuOpen"
+      id="mobile-menu"
+      class="max-h-0 w-full items-center overflow-hidden transition-all duration-300 ease-in-out md:flex md:max-h-full md:w-auto"
+    >
+      <ul class="navigation-menu-list">
+        <li>
+          <a
+            [routerLink]="routes.Home.path"
+            routerLinkActive="navigation-link-active"
+            *ngIf="isAuthenticated$ | async"
+            class="nagivation-link"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            [routerLink]="routes.TodoList.path"
+            routerLinkActive="navigation-link-active"
+            *ngIf="isAuthenticated$ | async"
+            class="nagivation-link"
+            >Todos</a
+          >
+        </li>
+        <li>
+          <a class="navigation-link-account-hidden">
+            <i class="fa-regular fa-circle-user mr-1 leading-6"></i>
+            Profile
+          </a>
+        </li>
+        <li>
+          <a (click)="logout()" *ngIf="isAuthenticated$ | async" class="navigation-link-account-hidden">
+            <i class="fa-solid fa-right-from-bracket mr-1 leading-6"></i>
+            Log Out
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Account Menu -->
+    <div class="hidden items-center space-x-5 text-gray-100 md:flex">
+      <a class="navigation-link-account">
+        <i class="fa-regular fa-circle-user mr-1 leading-6"></i>
+        Profile
+      </a>
+      <a (click)="logout()" *ngIf="isAuthenticated$ | async" class="navigation-link-account">
+        <i class="fa-solid fa-right-from-bracket mr-1 leading-6"></i>
+        Log Out
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class="">
+  <router-outlet />
+</main>

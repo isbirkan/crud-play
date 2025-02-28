@@ -58,7 +58,8 @@ export const removeTokens = () => {
  * @param key - The LOCAL_STORAGE key.
  * @returns The token string or null if not found.
  */
-export const getStoredToken = (key: string): string | null => localStorage.getItem(key);
+export const getStoredToken = (key?: string | null): string | null =>
+  localStorage.getItem(key || LOCAL_STORAGE.ACCESS_TOKEN);
 
 /**
  * Checks if the access token is still valid.

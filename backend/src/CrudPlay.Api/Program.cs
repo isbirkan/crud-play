@@ -32,6 +32,18 @@ builder.Services.AddSingleton<ITokenGeneration, TokenGeneration>();
 
 AddAuthenticationWithJwtBearer(builder.Services, builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi("v1", options =>
@@ -41,6 +53,7 @@ builder.Services.AddOpenApi("v1", options =>
 
 var app = builder.Build();
 
+app.UseCors("AllowFrontend");
 PersistanceInjection.InitializeDatabase(app.Services);
 await Seed.AddRolesAndAdminAsync(app.Services);
 app.UseMiddleware<ExceptionMiddleware>();

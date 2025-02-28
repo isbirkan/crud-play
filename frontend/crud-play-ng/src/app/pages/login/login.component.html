@@ -1,0 +1,74 @@
+<div class="relative py-3 sm:mx-auto sm:max-w-xl">
+  <div class="card-cover"></div>
+  <div class="card">
+    <div class="mx-auto max-w-md">
+      <div>
+        <h1 class="font-aller text-2xl font-semibold leading-tight tracking-tight">#TODO: Sign in, please!</h1>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="divide-y">
+        <div class="auth-group">
+          <div class="relative">
+            <input
+              autocomplete="off"
+              id="email"
+              name="email"
+              type="text"
+              class="auth-input peer"
+              placeholder="crud@play.ng"
+              formControlName="email"
+            />
+            <label
+              for="email"
+              class="auth-label peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-600 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600 dark:peer-placeholder-shown:text-gray-400 dark:peer-focus:text-gray-300"
+              >Email Address</label
+            >
+            <div *ngIf="email?.invalid && email?.touched" class="mt-1 text-xs text-red-500">
+              <span *ngFor="let message of validationService.getErrorMessages(email)">{{ message }}</span>
+            </div>
+          </div>
+          <div class="relative">
+            <input
+              autocomplete="off"
+              id="password"
+              name="password"
+              type="password"
+              class="auth-input peer"
+              placeholder="Password"
+              formControlName="password"
+            />
+            <label
+              for="password"
+              class="auth-label peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-600 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600 dark:peer-placeholder-shown:text-gray-400 dark:peer-focus:text-gray-300"
+              >Password</label
+            >
+            <div *ngIf="password?.invalid && password?.touched" class="mt-1 text-xs text-red-500">
+              <span *ngFor="let message of validationService.getErrorMessages(password)">{{ message }}</span>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button type="submit" class="auth-button" [disabled]="isLoading">
+              {{ isLoading ? 'Signing in...' : 'Sign In' }}
+            </button>
+          </div>
+
+          <p class="mt-2 text-sm text-red-500" *ngIf="errorMessage">{{ errorMessage }}</p>
+        </div>
+      </form>
+
+      <div class="relative">
+        <p class="text-sm font-light text-gray-900 dark:text-foreground">
+          Don’t have an account yet?
+          <a
+            routerLink="/register"
+            class="cursor-pointer font-medium uppercase text-violet-600 hover:underline dark:text-yellow-200"
+          >
+            Sign Up
+          </a>
+          <i class="fa-solid fa-plane ml-1 -rotate-90 text-violet-600 dark:text-yellow-200"></i>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
