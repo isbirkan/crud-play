@@ -7,11 +7,11 @@
 }
 
 .auth-group {
-  @apply space-y-8 py-8 text-base leading-6 text-gray-700 sm:text-lg sm:leading-7 dark:text-foreground;
+  @apply space-y-8 py-8 text-base leading-6 text-gray-700 sm:text-lg sm:leading-7 dark:text-gray-100;
 }
 
 .auth-input {
-  @apply h-10 w-full border-b-2 border-gray-300 text-foreground placeholder-transparent focus:border-violet-400 focus:outline-none dark:bg-gray-800;
+  @apply h-10 w-full border-b-2 border-gray-300 text-gray-100 placeholder-transparent focus:border-violet-400 focus:outline-none dark:bg-gray-800;
 }
 
 .auth-label {
@@ -19,5 +19,5 @@
 }
 
 .auth-button {
-  @apply cursor-pointer rounded-md bg-violet-600 px-5 py-2.5 text-center font-aller text-sm font-bold uppercase text-background hover:bg-violet-500 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:bg-violet-300 dark:text-foreground;
+  @apply cursor-pointer rounded-md bg-violet-600 px-5 py-2.5 text-center font-aller text-sm font-bold uppercase text-gray-900 hover:bg-violet-500 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:bg-violet-300 dark:text-gray-100;
 }

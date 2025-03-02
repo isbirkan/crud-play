@@ -6,7 +6,7 @@ export const baseEnvironment = {
   AUTH_API: 'api/auth',
   TODO_API: 'api/v1/todo',
 
-  USE_MOCK_DATA: true
+  USE_MOCK_DATA: false
 };
 
 export const environment = {

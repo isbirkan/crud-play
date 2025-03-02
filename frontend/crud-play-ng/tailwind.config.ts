@@ -4,10 +4,7 @@ export default {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
-      colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)'
-      },
+      colors: {},
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
         bebas: ['"Bebas Neue"', 'cursive'],

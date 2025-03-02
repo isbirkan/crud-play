@@ -1,5 +1,5 @@
 .navbar {
-  @apply fixed left-0 right-0 top-0 z-10 flex w-full flex-wrap justify-between border-b border-violet-600 bg-gray-900/80 px-4 py-4 shadow-md backdrop-blur-md md:flex-row md:justify-around md:px-0;
+  @apply fixed left-0 right-0 top-0 z-10 flex w-full flex-wrap justify-between border-b border-violet-600 bg-black/70 px-4 py-2 shadow-md backdrop-blur-md md:flex-row md:justify-around md:px-0 md:py-1;
 }
 
 .hamburger-button {

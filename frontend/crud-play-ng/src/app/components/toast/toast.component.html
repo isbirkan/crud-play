@@ -1,0 +1,34 @@
+<div class="toast-wrapper">
+  <div *ngFor="let toast of toasts$ | async" class="toast-body">
+    <div
+      class="toast-icon"
+      [ngClass]="{
+        'toast-icon-success': toast.type === toastTypes.SUCCESS,
+        'toast-icon-error': toast.type === toastTypes.ERROR,
+        'toast-icon-warning': toast.type === toastTypes.WARNING,
+        'toast-icon-info': toast.type === toastTypes.INFO
+      }"
+    >
+      <app-toast-success-icon *ngIf="toast.type === toastTypes.SUCCESS"></app-toast-success-icon>
+      <app-toast-error-icon *ngIf="toast.type === toastTypes.ERROR"></app-toast-error-icon>
+      <app-toast-warning-icon *ngIf="toast.type === toastTypes.WARNING"></app-toast-warning-icon>
+      <app-toast-info-icon *ngIf="toast.type === toastTypes.INFO"></app-toast-info-icon>
+      <span class="sr-only">{{ toast.type }} icon</span>
+    </div>
+
+    <div class="toast-message">{{ toast.message }}</div>
+
+    <button (click)="closeToast(toast.id)" type="button" class="close-button">
+      <span class="sr-only">Close</span>
+      <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+        />
+      </svg>
+    </button>
+  </div>
+</div>

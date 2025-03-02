@@ -3,7 +3,9 @@
   <div class="card">
     <div class="mx-auto max-w-md">
       <div>
-        <h1 class="font-aller text-2xl font-semibold leading-tight tracking-tight">#TODO: Sign in, please!</h1>
+        <h1 class="tracking-tigh font-aller text-2xl font-semibold leading-tight text-gray-300">
+          #TODO: Sign in, please!
+        </h1>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="login()" class="divide-y">
@@ -58,7 +60,7 @@
       </form>
 
       <div class="relative">
-        <p class="text-sm font-light text-gray-900 dark:text-foreground">
+        <p class="text-sm font-light text-gray-900 dark:text-gray-100">
           Don’t have an account yet?
           <a
             routerLink="/register"

@@ -1,4 +1,4 @@
-import LOCAL_STORAGE from '@/app/constants/localStorage';
+import LOCAL_STORAGE from '@/app/constants/localStorage.constants';
 import { environment } from '@/environments/environment';
 
 /**

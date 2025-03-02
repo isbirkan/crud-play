@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, delay, tap } from 'rxjs/operators';
 
+import TOAST_TYPE from '@/app/constants/toast-types.constants';
+import { ToastService } from '@/app/services/toast/toast.service';
 import { environment } from '@/environments/environment';
 
 import { loginResponse, refreshTokenResponse, registerResponse } from '../../mocks/auth.mocks';
@@ -18,9 +20,12 @@ export class AuthService {
   private authEndpoint = environment.AUTH_API;
   private _isAuthenticated = new BehaviorSubject<boolean>(!!getStoredToken());
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private toastService: ToastService
+  ) {}
 
-  /** Exposes authentication state as Observable */
+  /** Exposes authentication state as Observable. */
   get isAuthenticated$(): Observable<boolean> {
     return this._isAuthenticated.asObservable();
   }
@@ -37,6 +42,7 @@ export class AuthService {
         tap((res) => {
           saveTokens(res);
           this._isAuthenticated.next(true);
+          this.toastService.showToast(TOAST_TYPE.SUCCESS, 'Login successful!');
         })
       );
     }
@@ -45,19 +51,21 @@ export class AuthService {
       tap((res) => {
         saveTokens(res);
         this._isAuthenticated.next(true);
+        this.toastService.showToast(TOAST_TYPE.SUCCESS, 'Login successful!');
       }),
       catchError(this.handleError)
     );
   }
 
-  /** Logs out user */
+  /** Logs out user. */
   logout(): void {
     removeTokens();
     this._isAuthenticated.next(false);
+    this.toastService.showToast(TOAST_TYPE.INFO, 'You have been logged out.');
   }
 
   /**
-   * Registers new user
+   * Registers new user.
    * @param AuthRequest - Object containing `email` and `password`.
    */
   register(credentials: AuthRequest): Observable<RegisterResponse> {
@@ -65,18 +73,18 @@ export class AuthService {
       console.log('🟡 Using mock Register response');
       return registerResponse.pipe(
         delay(500),
-        tap((res) => console.log('Registration Successful:', res))
+        tap(() => this.toastService.showToast(TOAST_TYPE.SUCCESS, 'Registration successful!'))
       );
     }
 
     return this.http.post<RegisterResponse>(`${this.apiUrl}/${this.authEndpoint}/register`, credentials).pipe(
-      tap((res) => console.log('Registration Successful:', res)),
+      tap(() => this.toastService.showToast('success', 'Registration successful!')),
       catchError(this.handleError)
     );
   }
 
   /**
-   * Refreshes authentication token
+   * Refreshes authentication token.
    * @param refresh_token - string containing the initially generated Refresh Token.
    */
   refreshToken(refreshToken: string): Observable<AuthResponse> {
@@ -87,6 +95,7 @@ export class AuthService {
         tap((res) => {
           saveTokens(res);
           this._isAuthenticated.next(true);
+          this.toastService.showToast(TOAST_TYPE.INFO, 'Token refreshed!');
         })
       );
     }
@@ -95,14 +104,18 @@ export class AuthService {
       tap((res) => {
         saveTokens(res);
         this._isAuthenticated.next(true);
+        this.toastService.showToast(TOAST_TYPE.INFO, 'Token refreshed!');
       }),
       catchError(this.handleError)
     );
   }
 
-  /** Handles API Errors */
+  /** Handles API Errors. */
   private handleError(error: any): Observable<never> {
     console.error('AuthService Error:', error);
-    return throwError(() => new Error(error?.error?.message || 'Something went wrong, please try again.'));
+    const errorMessage = error?.error?.message || 'Something went wrong, please try again.';
+
+    this.toastService.showToast('error', errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }
