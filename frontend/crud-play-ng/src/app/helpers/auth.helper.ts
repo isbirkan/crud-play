@@ -93,7 +93,7 @@ const parseJwt = (token: string): Record<string, any> | null => {
 
     return JSON.parse(jsonPayload);
   } catch (error) {
-    console.error('Invalid JWT token:', error);
+    console.error('🔴 Invalid JWT token:', error);
     return null;
   }
 };

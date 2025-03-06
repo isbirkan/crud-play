@@ -7,9 +7,9 @@ import TOAST_TYPE from '@/app/constants/toast-types.constants';
 import { ToastService } from '@/app/services/toast/toast.service';
 import { environment } from '@/environments/environment';
 
+import { getStoredToken, removeTokens, saveTokens } from '../../helpers/auth.helper';
 import { loginResponse, refreshTokenResponse, registerResponse } from '../../mocks/auth.mocks';
 
-import { getStoredToken, removeTokens, saveTokens } from './auth.helper';
 import { AuthRequest, AuthResponse, RegisterResponse } from './auth.types';
 
 @Injectable({
@@ -112,10 +112,10 @@ export class AuthService {
 
   /** Handles API Errors. */
   private handleError(error: any): Observable<never> {
-    console.error('AuthService Error:', error);
+    console.error('🔴 AuthService Error:', error);
     const errorMessage = error?.error?.message || 'Something went wrong, please try again.';
 
-    this.toastService.showToast('error', errorMessage);
+    this.toastService.showToast(TOAST_TYPE.ERROR, errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

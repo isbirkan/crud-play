@@ -4,25 +4,21 @@ using System.Text.Json;
 using CrudPlay.Api.Models;
 using CrudPlay.Core.Exceptions;
 
-using Microsoft.AspNetCore.Diagnostics;
-
 namespace CrudPlay.Api.Middleware;
 
 public class ExceptionMiddleware(
-    RequestDelegate next,
     ILogger<ExceptionMiddleware> logger,
     IWebHostEnvironment env)
-    : IExceptionHandler
+    : IMiddleware
 {
-    private readonly RequestDelegate _next = next;
     private readonly ILogger<ExceptionMiddleware> _logger = logger;
     private readonly IWebHostEnvironment _env = env;
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception ex)
         {

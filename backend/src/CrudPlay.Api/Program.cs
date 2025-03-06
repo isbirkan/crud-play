@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -28,9 +28,11 @@ builder.Services.AddCore();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplication();
 
-builder.Services.AddSingleton<ITokenGeneration, TokenGeneration>();
+builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddScoped<ITokenGeneration, TokenGeneration>();
 
 AddAuthenticationWithJwtBearer(builder.Services, builder.Configuration);
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
@@ -60,12 +62,12 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
         options
-            .WithTitle("CrudPlay�API")
+            .WithTitle("CrudPlay API")
             .WithHttpBearerAuthentication(bearer =>
             {
                 bearer.Token = "bear-my-token";
@@ -76,6 +78,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 await app.RunAsync();
@@ -123,8 +126,12 @@ void AddAuthenticationWithJwtBearer(IServiceCollection services, IConfiguration 
     services.AddSingleton<IEmailSender<ApplicationUser>, FalseEmailSender>();
 
     services
-        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+        .AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+            .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -142,6 +149,11 @@ void AddAuthenticationWithJwtBearer(IServiceCollection services, IConfiguration 
                 OnAuthenticationFailed = context =>
                 {
                     Console.WriteLine($"JWT Authentication Failed: {context.Exception.Message}");
+                    return Task.CompletedTask;
+                },
+                OnChallenge = context =>
+                {
+                    Console.WriteLine($"JWT Challenge Triggered: {context.Error}, {context.ErrorDescription}");
                     return Task.CompletedTask;
                 }
             };

@@ -21,20 +21,20 @@ public class TodoController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpGet]
-    [Route("{id?}")]
-    public async Task<IActionResult> GetAsync([FromRoute] string? id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTodosAsync([FromQuery] string? userId, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(id))
+        if (!string.IsNullOrWhiteSpace(userId))
         {
-            return Ok(await _mediator.Send(new GetTodosQuery(), cancellationToken));
+            return Ok(await _mediator.Send(new GetTodosByUserIdQuery(userId), cancellationToken));
         }
 
-        return Ok(await _mediator.Send(new GetTodoByIdQuery(id), cancellationToken));
+        return Ok(await _mediator.Send(new GetTodosQuery(), cancellationToken));
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetByUserIdAsync([FromQuery] string userId, CancellationToken cancellationToken)
-        => Ok(await _mediator.Send(new GetTodosByUserIdQuery(userId), cancellationToken));
+    [Route("{id}")]
+    public async Task<IActionResult> GetTodoByIdAsync([FromRoute] string id, CancellationToken cancellationToken)
+        => Ok(await _mediator.Send(new GetTodoByIdQuery(id), cancellationToken));
 
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateTodoRequest request, CancellationToken cancellationToken)

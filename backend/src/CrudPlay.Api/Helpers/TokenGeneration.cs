@@ -6,13 +6,15 @@ using System.Text;
 using CrudPlay.Core.Identity;
 using CrudPlay.Core.Options;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CrudPlay.Api.Helpers;
 
-public class TokenGeneration(IConfiguration configuration) : ITokenGeneration
+public class TokenGeneration(IConfiguration configuration, UserManager<ApplicationUser> userManager) : ITokenGeneration
 {
     private readonly IConfiguration _configuration = configuration;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public string GenerateJwtToken(ApplicationUser user)
     {
@@ -26,6 +28,12 @@ public class TokenGeneration(IConfiguration configuration) : ITokenGeneration
             new(JwtRegisteredClaimNames.UniqueName, user.Email),
             new(JwtRegisteredClaimNames.Email, user.Email)
         };
+
+        var roles = _userManager.GetRolesAsync(user).Result;
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var token = new JwtSecurityToken(
             issuer: jwtConfiguration.Issuer,

@@ -1,5 +1,14 @@
-<div>
-  <p class="text-xl font-bold text-orange-500" *ngFor="let i of [].constructor(100); let index = index">
-    Paragraph {{ index + 1 }}: Hello
-  </p>
+<div class="p-4">
+  <h2 class="text-2xl font-bold">Todo List</h2>
+
+  <ul *ngIf="todos.length">
+    <li *ngFor="let todo of todos" class="my-2 flex items-center justify-between rounded bg-gray-100 p-2">
+      <span [class.line-through]="todo.isCompleted">{{ todo.title }}</span>
+      <div>
+        <button (click)="deleteTodo(todo.id)" class="rounded bg-red-500 px-2 py-1 text-white">Delete</button>
+      </div>
+    </li>
+  </ul>
+
+  <p *ngIf="!todos.length" class="text-gray-500">No todos found.</p>
 </div>

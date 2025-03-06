@@ -5,6 +5,7 @@ import { AuthGuard } from '@/app/guards/auth.guard';
 
 import { LayoutComponent } from './pages/layout/layout.component';
 import { LoginComponent } from './pages/login/login.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { TodoListComponent } from './pages/todo-list/todo-list.component';
 
 export const routes: Routes = [
@@ -22,5 +23,5 @@ export const routes: Routes = [
     ]
   },
   { path: ROUTES.LogIn.path, component: LoginComponent, data: { title: ROUTES.LogIn.title } },
-  { path: '**', redirectTo: '' }
+  { path: '**', component: NotFoundComponent }
 ];

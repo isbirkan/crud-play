@@ -4,5 +4,5 @@ export interface Todo {
   description?: string;
   isCompleted: boolean;
   dueDate: Date;
-  Priority?: number;
+  priority?: number;
 }
