@@ -10,6 +10,7 @@
     {
       "name": "crudplay-api",
       "env": {
+        "DOTNET_VERSION": "9.0",
         "DOTNET_ENVIRONMENT": "Production",
         "PersistenceOptions__ConnectionString": "${{DATABASE_URL}}",
         "JwtConfiguration__Audience": "CrudPlay.Api",
