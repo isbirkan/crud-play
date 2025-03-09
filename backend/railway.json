@@ -1,10 +1,10 @@
 {
   "build": {
     "builder": "nixpacks",
-    "buildCommand": "dotnet restore && dotnet build --configuration Release"
+    "buildCommand": "cd backend && dotnet restore && dotnet build --configuration Release"
   },
   "deploy": {
-    "startCommand": "dotnet ef database update -p src/CrudPlay.Infrastructure -s src/CrudPlay.Api --context ApplicationDbContext && dotnet ef database update -p src/CrudPlay.Infrastructure -s src/CrudPlay.Api --context TodoDbContext && dotnet run --project src/CrudPlay.Api"
+    "startCommand": "cd backend && dotnet ef database update -p src/CrudPlay.Infrastructure -s src/CrudPlay.Api --context ApplicationDbContext && dotnet ef database update -p src/CrudPlay.Infrastructure -s src/CrudPlay.Api --context TodoDbContext && dotnet run --project src/CrudPlay.Api"
   },
   "services": [
     {
