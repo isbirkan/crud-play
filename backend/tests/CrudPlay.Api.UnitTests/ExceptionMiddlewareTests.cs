@@ -30,13 +30,12 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             innerHttpContext.Response.WriteAsync(expectedOutput);
             return Task.CompletedTask;
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -60,12 +59,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new Exception("Generic exception message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -91,12 +89,12 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        // Act
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new Exception("Generic exception message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -124,12 +122,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new ApplicationValidatorException("ApplicationValidatorException message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -157,12 +154,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new ApplicationValidatorException("ApplicationValidatorException message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -178,7 +174,7 @@ public class ExceptionMiddlewareTests
     }
 
     [Fact]
-    public async Task ExceptionMiddleware_ArgumentExceptionException_EnvNotDevelopment_ShouldLogAndReturnTypeAndMessage()
+    public async Task ExceptionMiddleware_ArgumentException_EnvNotDevelopment_ShouldLogAndReturnTypeAndMessage()
     {
         // Arrange
         var logger = Substitute.For<ILogger<ExceptionMiddleware>>();
@@ -190,12 +186,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new ArgumentException("ArgumentException message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -211,7 +206,7 @@ public class ExceptionMiddlewareTests
     }
 
     [Fact]
-    public async Task ExceptionMiddleware_ArgumentExceptionException_EnvDevelopment_ShouldLogAndReturnTypeAndMessageAndDebugInfo()
+    public async Task ExceptionMiddleware_ArgumentException_EnvDevelopment_ShouldLogAndReturnTypeAndMessageAndDebugInfo()
     {
         // Arrange
         var logger = Substitute.For<ILogger<ExceptionMiddleware>>();
@@ -223,12 +218,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new ArgumentException("ArgumentException message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -256,12 +250,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new NotFoundException("NotFoundException message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -287,12 +280,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new NotFoundException("NotFoundException message");
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -320,12 +312,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new ForbiddenException();
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -351,12 +342,11 @@ public class ExceptionMiddlewareTests
         defaultContext.Request.Path = "/";
 
         // Act
-        var middlewareInstance = new ExceptionMiddleware(next: (innerHttpContext) =>
+        var middlewareInstance = new ExceptionMiddleware(logger, env);
+        await middlewareInstance.InvokeAsync(defaultContext, (innerHttpContext) =>
         {
             throw new ForbiddenException();
-        }, logger, env);
-
-        await middlewareInstance.InvokeAsync(defaultContext);
+        });
 
         // Assert
         defaultContext.Response.Body.Seek(0, SeekOrigin.Begin);
