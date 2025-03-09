@@ -1,0 +1,32 @@
+{
+  "build": {
+    "builder": "nixpacks",
+    "buildCommand": "dotnet restore && dotnet build --configuration Release"
+  },
+  "deploy": {
+    "startCommand": "dotnet ef database update -p src/CrudPlay.Infrastructure -s src/CrudPlay.Api --context ApplicationDbContext && dotnet ef database update -p src/CrudPlay.Infrastructure -s src/CrudPlay.Api --context TodoDbContext && dotnet run --project src/CrudPlay.Api"
+  },
+  "services": [
+    {
+      "name": "crudplay-api",
+      "env": {
+        "DOTNET_ENVIRONMENT": "Production",
+        "PersistenceOptions__ConnectionString": "${{DATABASE_URL}}",
+        "JwtConfiguration__Audience": "CrudPlay.Api",
+        "JwtConfiguration__Authority": "${{RAILWAY_PUBLIC_DOMAIN}}",
+        "JwtConfiguration__Issuer": "${{RAILWAY_PUBLIC_DOMAIN}}",
+        "JwtConfiguration__SecretKey": "${{JWT_SECRET}}"
+      },
+      "port": 8080
+    },
+    {
+      "name": "postgres",
+      "type": "postgres",
+      "env": {
+        "POSTGRES_DB": "crudplay",
+        "POSTGRES_USER": "postgres",
+        "POSTGRES_PASSWORD": "${{DATABASE_PASSWORD}}"
+      }
+    }
+  ]
+}
