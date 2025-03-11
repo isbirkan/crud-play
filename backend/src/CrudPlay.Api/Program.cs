@@ -34,12 +34,13 @@ builder.Services.AddScoped<ITokenGeneration, TokenGeneration>();
 AddAuthenticationWithJwtBearer(builder.Services, builder.Configuration);
 builder.Services.AddAuthorization();
 
+var allowedOrigins = builder.Configuration["CorsOptions:AllowedOrigins"]?.Split(';') ?? [];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200")
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
