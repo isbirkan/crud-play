@@ -22,13 +22,13 @@ jobs:
       - name: Deploy Bicep Template
         run: |
           az deployment group create \
-            --resource-group CrudPlay-RG \
+            --resource-group crud-play-RG \
             --template-file backend/pipeline/main.bicep \
             --parameters sqlAdmin=${{ secrets.SQL_ADMIN }} sqlPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
 
       - name: Deploy .NET Web API
         run: |
-          az webapp deploy --name crudplay-api --resource-group CrudPlay-RG --src-path out/
+          az webapp deploy --name crud-play-api --resource-group crud-play-RG --src-path out/
 
       - name: Logout from Azure
         run: az logout
