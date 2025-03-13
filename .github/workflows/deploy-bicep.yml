@@ -23,7 +23,7 @@ jobs:
         run: |
           az deployment group create \
             --resource-group CrudPlay-RG \
-            --template-file main.bicep \
+            --template-file crud-play/backend/pipeline/main.bicep \
             --parameters sqlAdmin=${{ secrets.SQL_ADMIN }} sqlPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
 
       - name: Deploy .NET Web API
