@@ -1,9 +1,9 @@
 name: Deploy to Azure
 
 on:
-  push:
-    branches:
-      - main  # Runs deployment when code is pushed to "main"
+  # push:
+  #   branches:
+  #     - main  # Runs deployment when code is pushed to "main"
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
     
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -25,6 +25,15 @@ jobs:
             --resource-group crud-play-RG \
             --template-file backend/pipeline/main.bicep \
             --parameters sqlAdmin=${{ secrets.SQL_ADMIN }} sqlPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Build & Publish
+        run: |
+          dotnet publish backend/CrudPlay.Api/CrudPlay.Api.csproj -c Release -o out
 
       - name: Deploy .NET Web API
         run: |
