@@ -69,15 +69,15 @@ resource webAppConfig 'Microsoft.Web/sites/config@2024-04-01' = {
       }
       {
         name: 'PersistenceOptions__ConnectionString'
-        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/PersistenceOptions__ConnectionString/)'
+        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/PersistenceOptions-ConnectionString/)'
       }
       {
-        name: 'PersistenceOptions__Implementation'
+        name: 'PersistenceOptions-Implementation'
         value: 'EntityFramework'
       }
       {
         name: 'JwtConfiguration__Audience'
-        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/JwtConfiguration__Audience/)'
+        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/JwtConfiguration-Audience/)'
       }
       {
         name: 'JwtConfiguration__Authority'
@@ -89,15 +89,15 @@ resource webAppConfig 'Microsoft.Web/sites/config@2024-04-01' = {
       }
       {
         name: 'JwtConfiguration__SecretKey'
-        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/JwtConfiguration__SecretKey/)'
+        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/JwtConfiguration-SecretKey/)'
       }
       {
         name: 'CorsOptions__AllowedOrigins'
-        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/CorsOptions__AllowedOrigins/)'
+        value: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/CorsOptions-AllowedOrigins/)'
       }
     ]
     cors: {
-      allowedOrigins: ['https://yourgithubpagesurl.github.io']
+      allowedOrigins: ['http://localhost:4200','https://yourgithubpagesurl.github.io']
     }
   }
 }
