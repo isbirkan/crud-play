@@ -33,7 +33,7 @@ jobs:
 
       - name: Build & Publish
         run: |
-          dotnet publish backend/CrudPlay.Api/CrudPlay.Api.csproj -c Release -o out
+          dotnet publish backend/src/CrudPlay.Api/CrudPlay.Api.csproj -c Release -o out
 
       - name: Deploy .NET Web API
         run: |
